@@ -1,9 +1,7 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { NextSeo } from "next-seo";
 import { AvailableProjects } from "@/routes/home/available-projects";
-import { UpcomingProjects } from "@/routes/home/upcoming-projects";
 import { CompletedProjects } from "@/routes/home/completed-projects";
+import { HeroSection } from '@/routes/home/hero-section';
+import { UpcomingProjects } from "@/routes/home/upcoming-projects";
 
 export const metadata = {
   title: "ReDAO Launchpad - Pioneering IDO Platform for Crypto Innovators",
@@ -20,10 +18,19 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      <div>
-        <AvailableProjects />
-        <UpcomingProjects />
-        <CompletedProjects />
+      <div className='relative'>
+        <div className="home-bg relative z-[2] pb-[120px]">
+          <div className="space-y-20 block mx-auto max-w-[1280px]">
+            <HeroSection/>
+            <AvailableProjects />
+            <UpcomingProjects />
+            <CompletedProjects />
+          </div>
+        </div>
+        <div className="absolute z-[1] w-full h-full top-0 left-0 overflow-hidden">
+          <div className="w-[744px] aspect-square rounded-full bg-[#cc2727] absolute -left-[500px] top-[100px]"></div>
+          <div className="w-[744px] aspect-square rounded-full bg-[#cc2727] absolute right-[20px] -bottom-[400px]"></div>
+        </div>
       </div>
     </>
   );

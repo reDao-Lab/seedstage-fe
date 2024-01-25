@@ -1,25 +1,16 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { Footer } from '@/components/footer';
 import { Logo } from "@/components/logo";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Sidebar } from "@/components/sidebar";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { Prompt } from "next/font/google";
+import Link from "next/link";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const promptFont = Prompt({ 
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] }
+);
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,85 +24,37 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="border-b bg-white">
-          <div className="flex h-16 items-center px-4">
+      <body className={promptFont.className}>
+        <div className="bg-[#0A0A0A]/50 backdrop-blur-[100px] flex justify-center">
+          <div className="flex py-6 items-center max-w-[1280px] w-full">
             <Link href={"/"}>
               <Logo />
             </Link>
             <nav
               className={cn("flex items-center space-x-4 lg:space-x-6  ml-8")}
             >
-              <Link
+              {/* <Link
                 href={"/"}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
                 Home
-              </Link>
+              </Link> */}
             </nav>
             <div className="ml-auto flex items-center space-x-4">
-              <div>
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="md:w-[100px] lg:w-[300px]"
-                />
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="relative h-8 w-8 rounded-full"
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-                      <AvatarFallback>SC</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">shadcn</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        m@example.com
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      Profile
-                      <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Billing
-                      <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Settings
-                      <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>New Team</DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button size={"custom"} className='uppercase'>Connect Wallet</Button>
             </div>
           </div>
         </div>
         <div className="bg-background">
-          <div className="grid lg:grid-cols-5">
-            <Sidebar className="hidden lg:block" />
-            <div className="col-span-3 lg:col-span-4 lg:border-l">
-              <div className="h-full px-4 py-6 lg:px-8">{children}</div>
+          <div className="">
+            {/* <Sidebar className="hidden lg:block" /> */}
+            <div className="">
+              <div className="h-full">{children}</div>
             </div>
           </div>
         </div>
+
+        <Footer/>
       </body>
     </html>
   );
