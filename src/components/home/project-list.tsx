@@ -21,7 +21,7 @@ export const ProjectList = ({data}:any) => {
     >
       {data.map((item:any) => (
         <SwiperSlide key={item.id} className='!w-[324px]'>
-          <ProjectItem id={item.id} name={item.name} short_description={item.short_description} chain='Polygon' cover_image={item.cover_image} raise={100000} slug={item.slug} status='Upcoming'/>
+          <ProjectItem id={item.id} name={item.name} short_description={item.short_description} chain='Polygon' cover_image={item.cover_image} total_raise={item.total_raise} slug={item.slug} status={item.status || 'Opening'}/>
         </SwiperSlide>
       ))}
 
