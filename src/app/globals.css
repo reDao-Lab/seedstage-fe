@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
  
 @layer base {
   :root {
@@ -75,7 +76,31 @@
   }
 }
 
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  display: block !important;
+  background: transparent;
+  border-radius: 1px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 1px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:vertical {
+  border-radius: 1px;
+  background: #CC2727;
+  width: 100%;
+}
 .home-bg {
   background: rgba(10, 10, 10, 0.50);
   backdrop-filter: blur(100px);
+}
+
+.ido-box {
+  @apply px-3 xl:px-5 py-5;
+
+  border-radius: 12px;
+  background: rgba(18, 18, 18, 0.70);
+  backdrop-filter: blur(30px);
 }
