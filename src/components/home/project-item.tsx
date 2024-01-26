@@ -12,6 +12,8 @@ interface IProjectItem {
 }
 
 export const ProjectItem = ({id, chain,  short_description, name, total_raise, status, cover_image, slug}: IProjectItem) => {
+  const display_status = status === 'open' ? 'Opening' : status === 'upcoming' ? 'Upcoming' : 'Ended'
+  const class_status = status === 'open' ? 'bg-[#66cc27]' : status === 'upcoming' ? 'bg-[#EA9A22]' : 'bg-[#CC2727]'
   return (
     <div className="max-w-[324px] bg-[#121212]" key={id}>
       <div className="space-y-5 rounded-[8px] overflow-hidden">
@@ -27,7 +29,7 @@ export const ProjectItem = ({id, chain,  short_description, name, total_raise, s
             </Link>
           </div>
           <div className="absolute z-[2] flex items-center gap-1.5 top-3 right-3">
-            <div className="bg-[#66cc27] py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px] capitalize">{status}</div>
+            <div className={`py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px] ${class_status}`}>{display_status}</div>
             <div className="bg-white py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px]">Public</div>
           </div>
         </span>
@@ -53,13 +55,15 @@ export const ProjectItem = ({id, chain,  short_description, name, total_raise, s
                 <p className='text-[#e7e7e7] font-medium text-sm'>{chain}</p>
               </div>
             </div>
-            <div className="space-y-1 text-right">
-              <p className='text-[#8e8e8e] font-medium text-xs'>Whitelist phase end in:</p>
-              <div className='flex items-center'>
-                <div className=""></div>
-                <p className='text-[#e7e7e7] font-medium text-sm'>30d : 24h : 60m : 60s</p>
+            {status === 'open' && (
+              <div className="space-y-1 text-right">
+                <p className='text-[#8e8e8e] font-medium text-xs'>Whitelist phase end in:</p>
+                <div className='flex items-center'>
+                  <div className=""></div>
+                  <p className='text-[#e7e7e7] font-medium text-sm'>30d : 24h : 60m : 60s</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
