@@ -11,6 +11,11 @@ export async function AvailableProjects() {
       filter: {
         status: "open",
       },
+      fields: [
+        "*",
+        "ido_chains.*",
+        "token_chains.*"
+      ],
       limit: 10,
     })
   );

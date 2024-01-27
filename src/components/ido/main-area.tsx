@@ -75,7 +75,6 @@ export const MainArea = ({ name, IOUName, veting, idoPrice, ido_network, token_n
             <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>Jan 29, 2024 17:00 (GMT+7)</p>
             <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>Whitelist winner required. Guaranteed basis.</p>
           </div>
-          
         </div>
       </div>
     </div>

@@ -11,6 +11,11 @@ export async function CompletedProjects() {
       filter: {
         status: "completed",
       },
+      fields: [
+        "*",
+        "ido_chains.*",
+        "token_chains.*"
+      ],
       limit: 10,
     })
   );

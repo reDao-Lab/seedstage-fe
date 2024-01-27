@@ -11,6 +11,11 @@ export async function UpcomingProjects() {
       filter: {
         status: "upcoming",
       },
+      fields: [
+        "*",
+        "ido_chains.*",
+        "token_chains.*"
+      ],
       limit: 10,
     })
   );

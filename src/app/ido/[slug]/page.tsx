@@ -35,6 +35,11 @@ export default async function IdoDetailPage({
       filter: {
         slug: params.slug,
       },
+      fields: [
+        "*",
+        "ido_chains.*",
+        "token_chains.*"
+      ],
       limit: 1,
     })
   );
@@ -50,10 +55,10 @@ export default async function IdoDetailPage({
             {/* <div className="text-2xl font-bold">{project.name}</div> */}
 
             <div className="mt-3 space-y-3 px-3 xl:px-0">
-              <MainArea name={project.name} IOUName={"PECLAND"} veting={"25% TGE, 1month cliff, linear vest over 4 months"} idoPrice={999999999} ido_network={"Polygon"} token_network={"Polygon"} total_raise={999999999}/>
-              <DepositArea contractAddress={"0x9f63334ac49fc949a2534e8b1f98c2a34d8dcef5"}/>
+              <MainArea name={project.name} IOUName={project.name} veting={"25% TGE, 1month cliff, linear vest over 4 months"} idoPrice={project?.ido_price} ido_network={"Polygon"} token_network={"Polygon"} total_raise={project?.total_raise}/>
+              <DepositArea contractAddress={project?.contract_address || "0x9f63334ac49fc949a2534e8b1f98c2a34d8dcavd"}/>
             </div>
-            
+
             <div className="mt-3 px-3 xl:px-0">
               <div
                 className="ido-box text-[#e7e7e7]"
