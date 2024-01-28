@@ -1,10 +1,7 @@
 import { Footer } from '@/components/footer';
-import { Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Nav } from '@/components/nav';
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
 
 const promptFont = Prompt({ 
@@ -25,26 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={promptFont.className}>
-        <div className="bg-[#0A0A0A]/50 backdrop-blur-[100px] flex justify-center">
-          <div className="flex py-6 items-center max-w-[1280px] w-full">
-            <Link href={"/"}>
-              <Logo />
-            </Link>
-            <nav
-              className={cn("flex items-center space-x-4 lg:space-x-6  ml-8")}
-            >
-              {/* <Link
-                href={"/"}
-                className="text-sm font-medium transition-colors hover:text-primary"
-              >
-                Home
-              </Link> */}
-            </nav>
-            <div className="ml-auto flex items-center space-x-4">
-              <Button size={"custom"} className='uppercase'>Connect Wallet</Button>
-            </div>
-          </div>
-        </div>
+        <Nav/>
         <div className="bg-background">
           <div className="">
             {/* <Sidebar className="hidden lg:block" /> */}
