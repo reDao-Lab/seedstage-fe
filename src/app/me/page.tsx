@@ -5,9 +5,12 @@ import { Button } from '@/components/ui/button';
 
 import TeleIco from '@/images/tele-ico.svg';
 import XIco from '@/images/x-ico.svg';
+import { shorten_address } from "@/lib/utils";
 import Image from 'next/image';
+import { useAccount } from 'wagmi';
 
 const Me = () => {
+  const account = useAccount()
   return (
     <section>
       <div className="px-3 xl:px-0">
@@ -28,16 +31,13 @@ const Me = () => {
                   alt="User avatar placeholder"
                 />
                 <div className="text-[#E7E7E7] flex items-center gap-4">
-                  <div className="font-medium text-xl">0x96...cef5</div>
-                  <button className="text-[#D65252] font-medium">
-                    Edit
-                  </button>
+                  <div className="font-medium text-xl">{shorten_address(account?.address || "")}</div>
                 </div>
               </div>
               <div className="mb-6 space-y-[14px]">
                 <p className="text-[#8E8E8E] text-base">Main Wallet Address</p>
                 <div className="flex items-center justify-between gap-4 border-b w-full pb-2 border-b-[#8E8E8E]">
-                  <p className="text-[#5B5B5B] text-xl">0x96...cef5</p>
+                  <p className="text-[#5B5B5B] text-xl">{shorten_address(account?.address || "")}</p>
                   <button className="text-[#D65252] font-medium">
                    Copy
                   </button>

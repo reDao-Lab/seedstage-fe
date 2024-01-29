@@ -3,10 +3,13 @@ import { Nav } from '@/components/nav';
 import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import Providers from '@/providers/provider';
 
-const promptFont = Prompt({ 
+const promptFont = Prompt({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] }
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+}
 );
 
 export const metadata: Metadata = {
@@ -22,17 +25,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={promptFont.className}>
-        <Nav/>
-        <div className="bg-background">
-          <div className="">
-            {/* <Sidebar className="hidden lg:block" /> */}
+        <Providers>
+          <Nav />
+          <div className="bg-background">
             <div className="">
-              <div className="h-full">{children}</div>
+              {/* <Sidebar className="hidden lg:block" /> */}
+              <div className="">
+                <div className="h-full">{children}</div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <Footer/>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
