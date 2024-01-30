@@ -1,7 +1,7 @@
-import { Breadcrumb } from '@/components/breadcrumb';
-import { DepositArea } from '@/components/ido/deposit-area';
-import { MainArea } from '@/components/ido/main-area';
-import { VestingSchedule } from '@/components/ido/vesting-schedule';
+import { Breadcrumb } from "@/components/breadcrumb";
+import { DepositArea } from "@/components/ido/deposit-area";
+import { MainArea } from "@/components/ido/main-area";
+import { VestingSchedule } from "@/components/ido/vesting-schedule";
 import { directus } from "@/lib/directus";
 import { readItems } from "@directus/sdk";
 import { Metadata, ResolvingMetadata } from "next";
@@ -35,39 +35,53 @@ export default async function IdoDetailPage({
       filter: {
         slug: params.slug,
       },
-      fields: [
-        "*",
-        "ido_chains.*",
-        "token_chains.*"
-      ],
+      fields: ["*", "ido_chains.*", "token_chains.*"],
       limit: 1,
     })
   );
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <div className="home-bg relative z-[2] pb-[120px]">
         <div className="space-y-20 block mx-auto max-w-[1280px]">
           <section>
             <div className="px-3 xl:px-0">
-              <Breadcrumb list={[{name: "Home", path: "/"}, {name: "Detail Project", path: "/ido/" + params.slug}]}/>
+              <Breadcrumb
+                list={[
+                  { name: "Home", path: "/" },
+                  { name: "Detail Project", path: "/ido/" + params.slug },
+                ]}
+              />
             </div>
             {/* <div className="text-2xl font-bold">{project.name}</div> */}
 
             <div className="mt-3 space-y-3 px-3 xl:px-0">
-              <MainArea name={project.name} IOUName={project.name} veting={"25% TGE, 1month cliff, linear vest over 4 months"} idoPrice={project?.ido_price} ido_network={"Polygon"} token_network={"Polygon"} total_raise={project?.total_raise}/>
-              <DepositArea contractAddress={project?.contract_address || "0x9f63334ac49fc949a2534e8b1f98c2a34d8dcavd"}/>
+              <MainArea
+                name={project.name}
+                IOUName={project.name}
+                veting={"25% TGE, 1month cliff, linear vest over 4 months"}
+                idoPrice={project?.ido_price}
+                ido_network={"Polygon"}
+                token_network={"Polygon"}
+                total_raise={project?.total_raise}
+              />
+              <DepositArea
+                contractAddress={
+                  project?.contract_address ||
+                  "0x9f63334ac49fc949a2534e8b1f98c2a34d8dcavd"
+                }
+              />
             </div>
 
             <div className="mt-3 px-3 xl:px-0">
               <div
-                className="ido-box text-[#e7e7e7]"
+                className="ido-box prose dark:prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: project.content }}
               ></div>
             </div>
 
             <div className="mt-3 px-3 xl:px-0">
-              <VestingSchedule/>
+              <VestingSchedule />
             </div>
           </section>
         </div>
