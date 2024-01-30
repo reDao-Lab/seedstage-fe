@@ -20,15 +20,15 @@ export default function Home() {
     <>
       <div className='relative'>
         <div className="home-bg relative z-[2] pb-[120px]">
+          <HeroSection/>
           <div className="space-y-20 block mx-auto max-w-[1280px]">
-            <HeroSection/>
             <AvailableProjects />
             <UpcomingProjects />
             <CompletedProjects />
           </div>
         </div>
         <div className="absolute z-[1] w-full h-full top-0 left-0 overflow-hidden">
-          <div className="w-[744px] aspect-square rounded-full bg-[#cc2727] absolute -left-[500px] top-[100px]"></div>
+          <div className="w-[300px] -left-[150px] lg:w-[744px] aspect-square rounded-full bg-[#cc2727] absolute lg:-left-[500px] top-[100px]"></div>
           <div className="w-[744px] aspect-square rounded-full bg-[#cc2727] absolute right-[20px] -bottom-[400px]"></div>
         </div>
       </div>

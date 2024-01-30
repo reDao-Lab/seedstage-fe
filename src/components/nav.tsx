@@ -3,14 +3,7 @@
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Button } from "./ui/button";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import userStore from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -29,7 +22,7 @@ export const Nav = () => {
   }, [login])
 
   return (
-    <div className="bg-[#0A0A0A]/50 backdrop-blur-[100px] flex justify-center">
+    <div className="bg-[#0A0A0A]/50 flex justify-center relative z-50 px-4 xl:px-0">
       <div className="flex py-6 items-center max-w-[1280px] w-full">
         <Link href={"/"}>
           <Logo />
