@@ -6,12 +6,12 @@ type TUserStore = {
   data: any
   loading: boolean
   error: any
-  login: (status: boolean ,onSuccess?: voidFunc) => void
+  login: (status: boolean, onSuccess?: voidFunc) => void
 }
 
 let initData = {
-  id: "",
-  isLogin: false
+  id: '',
+  isLogin: false,
 }
 
 const userStore = create<TUserStore>((set: any) => ({
@@ -20,11 +20,11 @@ const userStore = create<TUserStore>((set: any) => ({
   error: null,
   login: async (status: boolean, onSuccess?: voidFunc) => {
     await set((_: any) => ({
-      data: {..._.data, isLogin: status},
+      data: { ..._.data, isLogin: status },
       loading: true,
-      error: null
+      error: null,
     }))
-  }
+  },
 }))
 
 export default userStore

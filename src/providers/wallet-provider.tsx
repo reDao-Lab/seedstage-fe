@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react'
 import {
   RainbowKitProvider,
   connectorsForWallets,
   darkTheme,
-} from "@rainbow-me/rainbowkit";
+} from '@rainbow-me/rainbowkit'
 import {
   trustWallet,
   metaMaskWallet,
@@ -12,25 +12,25 @@ import {
   walletConnectWallet,
   coin98Wallet,
   rabbyWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, bsc, arbitrum } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+} from '@rainbow-me/rainbowkit/wallets'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { mainnet, bsc, arbitrum } from 'wagmi/chains'
+import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, bsc, arbitrum],
   [publicProvider()],
-);
+)
 
-const projectId = "cb0ac00ddda350fd34a77091f9d24084";
+const projectId = 'cb0ac00ddda350fd34a77091f9d24084'
 
 const appInfo = {
-  appName: "ReDAO",
-};
+  appName: 'ReDAO',
+}
 
 const connectors = connectorsForWallets([
   {
-    groupName: "Popular",
+    groupName: 'Popular',
     wallets: [
       metaMaskWallet({ projectId, chains }),
       walletConnectWallet({ projectId, chains }),
@@ -41,18 +41,18 @@ const connectors = connectorsForWallets([
       coin98Wallet({ projectId, chains }),
     ],
   },
-]);
+])
 
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
   publicClient,
   webSocketPublicClient,
-});
+})
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -60,5 +60,5 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         {mounted && children}
       </RainbowKitProvider>
     </WagmiConfig>
-  );
+  )
 }

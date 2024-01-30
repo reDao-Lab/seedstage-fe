@@ -1,16 +1,10 @@
-"use client";
+'use client'
 
-import React from "react";
-import { WalletProvider } from "./wallet-provider";
-
+import React from 'react'
+import { WalletProvider } from './wallet-provider'
 
 function Providers({ children }: React.PropsWithChildren) {
-  return (
-    <WalletProvider>
-      {children}
-    </WalletProvider>
-  );
+  return <WalletProvider>{children}</WalletProvider>
 }
 
-export default Providers;
-
+export default Providers
