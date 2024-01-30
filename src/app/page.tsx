@@ -21,7 +21,7 @@ export default function Home() {
       <div className='relative'>
         <div className="home-bg relative z-[2] pb-[120px]">
           <HeroSection/>
-          <div className="space-y-20 block mx-auto max-w-[1280px]">
+          <div className="space-y-20 block mx-auto max-w-[1280px] mt-20">
             <AvailableProjects />
             <UpcomingProjects />
             <CompletedProjects />
