@@ -41,8 +41,6 @@ export const MainArea = ({
   total_raise,
   round_data,
 }: IMainArea) => {
-
-  console.log(22, round_data)
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
