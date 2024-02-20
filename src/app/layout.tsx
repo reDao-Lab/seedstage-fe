@@ -1,10 +1,11 @@
 import { Footer } from '@/components/footer'
 import { Nav } from '@/components/nav'
+import { Toaster } from '@/components/ui/sonner'
+import Providers from '@/providers/provider'
+import '@rainbow-me/rainbowkit/styles.css'
 import type { Metadata } from 'next'
 import { Prompt } from 'next/font/google'
 import './globals.css'
-import '@rainbow-me/rainbowkit/styles.css'
-import Providers from '@/providers/provider'
 
 const promptFont = Prompt({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({
             </div>
           </div>
           <Footer />
+          <Toaster theme='dark' closeButton/>
         </Providers>
       </body>
     </html>

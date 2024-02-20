@@ -65,6 +65,10 @@ export default async function IdoDetailPage({
     }),
   )
 
+  const round_list = await public_directus.request(
+    readItems('seedstage_rounds'),
+  )
+
   const merkle_proof =
     (await merkleproof_directus.request(
       readItems('seedstage_round_merkleproofs', {
@@ -101,7 +105,7 @@ export default async function IdoDetailPage({
                 ido_network={'Arbitrum'}
                 token_network={'Arbitrum'}
                 total_raise={project?.total_raise}
-                round_data={round_data[0]}
+                round_data={[...round_list]}
               />
               <DepositArea
                 seedStages={data}
