@@ -2,7 +2,7 @@ import { Breadcrumb } from '@/components/breadcrumb'
 import { DepositArea } from '@/components/ido/deposit-area'
 import { MainArea } from '@/components/ido/main-area'
 import { VestingSchedule } from '@/components/ido/vesting-schedule'
-import { directus } from '@/lib/directus'
+import { directus, merkleproof_directus, public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 import { Metadata, ResolvingMetadata } from 'next'
 
@@ -40,6 +40,43 @@ export default async function IdoDetailPage({
     }),
   )
 
+  const seedStages = await public_directus.request(
+    readItems('seedstages', {
+      filter: {
+        status: 'open' || 'upcoming' || 'completed',
+      },
+      fields: [
+        '*',
+        'iou_token.token_address',
+        'deposit_token.*',
+        'project_information.*',
+      ],
+    }),
+  )
+
+  const data = seedStages[0]
+
+  const round_data = await public_directus.request(
+    readItems('seedstage_rounds', {
+      filter: {
+        id: data.rounds[0],
+      },
+      limit: 1,
+    }),
+  )
+
+  const merkle_proof =
+    (await merkleproof_directus.request(
+      readItems('seedstage_round_merkleproofs', {
+        filter: {
+          seedstage_round_id: data.rounds[0],
+          evm_address:
+            '0xbAC31D3Bed83dDAe64D3A3BCD55400c4DCf0997a'.toLowerCase(),
+        },
+        limit: 1,
+      }),
+    )) || []
+
   return (
     <div className='relative'>
       <div className='home-bg relative z-[2] pb-[120px]'>
@@ -57,19 +94,20 @@ export default async function IdoDetailPage({
 
             <div className='mt-3 space-y-3 px-3 xl:px-0'>
               <MainArea
-                name={project.name}
-                IOUName={project.name}
+                name={data?.project_information.name}
+                IOUName={data?.iou_token.token_address}
                 veting={'25% TGE, 1month cliff, linear vest over 4 months'}
                 idoPrice={project?.ido_price}
-                ido_network={'Polygon'}
-                token_network={'Polygon'}
+                ido_network={'Arbitrum'}
+                token_network={'Arbitrum'}
                 total_raise={project?.total_raise}
+                round_data={round_data[0]}
               />
               <DepositArea
-                contractAddress={
-                  project?.contract_address ||
-                  '0x9f63334ac49fc949a2534e8b1f98c2a34d8dcavd'
-                }
+                seedStages={data}
+                round_data={round_data[0]}
+                merkle_proof={merkle_proof}
+                round_index={0}
               />
             </div>
 

@@ -14,11 +14,11 @@ import {
   rabbyWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { mainnet, bsc, arbitrum } from 'wagmi/chains'
+import { mainnet, bsc, arbitrum, polygonMumbai } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, bsc, arbitrum],
+  [mainnet, bsc, arbitrum, polygonMumbai],
   [publicProvider()],
 )
 

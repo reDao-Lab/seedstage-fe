@@ -14,6 +14,7 @@ interface IMainArea {
   ido_network: string
   token_network: string
   total_raise: number
+  round_data: any
 }
 
 interface IIdentification {
@@ -36,6 +37,7 @@ export const MainArea = ({
   ido_network,
   token_network,
   total_raise,
+  round_data,
 }: IMainArea) => {
   return (
     <div className='ido-box grid grid-cols-7 gap-6'>
@@ -49,20 +51,20 @@ export const MainArea = ({
         />
         <VetingInfo veting={veting} />
 
-        <div className='flex w-full justify-between items-center'>
+        {/* <div className='flex w-full justify-between items-center'>
           <p className='text-[#d65252]'>This pool requires Rookie tier</p>
           <Button size={'custom'} className='uppercase'>
             Stake more
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className='col-span-7 xl:col-span-3 p-3 rounded-[8px] border border-[#3b3b3b] space-y-5'>
         <div className='bg-[#e7e7e7] rounded-[8px] p-3 font-medium'>
           <p className='text-center text-xs text-[#5b5b5b]'>
-            Whitelist phase end in:
+            {round_data.name} phase end in:
           </p>
           <p className='text-center text-[#0a0a0a] text-xl mt-1.5'>
-            30d : 24h : 60m : 60s
+            {round_data.end_time}
           </p>
         </div>
 
