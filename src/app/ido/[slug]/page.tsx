@@ -10,18 +10,9 @@ export async function generateMetadata(
   { params }: { params: { slug: string } },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const [project] = await directus.request(
-    readItems('ido_projects', {
-      filter: {
-        slug: params.slug,
-      },
-      limit: 1,
-    }),
-  )
-
   return {
-    title: `${project.name} - Revolutionizing Blockchain Technology`,
-    description: project.short_description,
+    title: `Revolutionizing Blockchain Technology`,
+    description: 'short_description',
   }
 }
 
@@ -30,21 +21,8 @@ export default async function IdoDetailPage({
 }: {
   params: { slug: string }
 }) {
-  const [project] = await directus.request(
-    readItems('ido_projects', {
-      filter: {
-        slug: params.slug,
-      },
-      fields: ['*', 'ido_chains.*', 'token_chains.*'],
-      limit: 1,
-    }),
-  )
-
   const seedStages = await public_directus.request(
     readItems('seedstages', {
-      filter: {
-        status: 'open' || 'upcoming' || 'completed',
-      },
       fields: [
         '*',
         'iou_token.token_address',
@@ -54,7 +32,9 @@ export default async function IdoDetailPage({
     }),
   )
 
-  const data = seedStages[0]
+  const data = seedStages.find((s: any) => {
+    return s.project_information.slug === params.slug
+  })
 
   const round_data = await public_directus.request(
     readItems('seedstage_rounds', {
@@ -65,9 +45,18 @@ export default async function IdoDetailPage({
     }),
   )
 
-  const round_list = await public_directus.request(
-    readItems('seedstage_rounds'),
-  )
+  let round_list = []
+
+  for (let round_id of data.rounds) {
+    const round = await public_directus.request(
+      readItems('seedstage_rounds', {
+        filter: {
+          id: round_id,
+        },
+      }),
+    )
+    round_list.push(round[0])
+  }
 
   const merkle_proof =
     (await merkleproof_directus.request(
@@ -101,10 +90,10 @@ export default async function IdoDetailPage({
                 name={data?.project_information.name}
                 IOUName={data?.iou_token.token_address}
                 veting={'25% TGE, 1month cliff, linear vest over 4 months'}
-                idoPrice={project?.ido_price}
+                idoPrice={0.0}
                 ido_network={'Arbitrum'}
                 token_network={'Arbitrum'}
-                total_raise={project?.total_raise}
+                total_raise={round_data[0]?.allocation}
                 round_data={[...round_list]}
               />
               <DepositArea
@@ -118,7 +107,9 @@ export default async function IdoDetailPage({
             <div className='mt-3 px-3 xl:px-0'>
               <div
                 className='ido-box prose dark:prose-invert max-w-none'
-                dangerouslySetInnerHTML={{ __html: project.content }}
+                dangerouslySetInnerHTML={{
+                  __html: data.project_information.content,
+                }}
               ></div>
             </div>
 

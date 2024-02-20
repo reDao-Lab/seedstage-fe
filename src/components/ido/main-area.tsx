@@ -45,73 +45,74 @@ export const MainArea = ({
     hours: 0,
     minutes: 0,
     seconds: 0,
-  });
+  })
   const [currentRound, setCurrentRound] = useState({
-    "round_type": "",
-    "name": "",
-    "id": "",
-    "allocation": 0,
-    "min_allocation_per_address": 0,
-    "max_allocation_per_address": 0,
-    "end_time": "",
-    "start_time": "",
-    "seedstage_id": ""
+    round_type: '',
+    name: '',
+    id: '',
+    allocation: 0,
+    min_allocation_per_address: 0,
+    max_allocation_per_address: 0,
+    end_time: '',
+    start_time: '',
+    seedstage_id: '',
   })
 
-  const trueUTC = useCallback((_:string)=>{
+  const trueUTC = useCallback((_: string) => {
     return `${_}Z`
-  },[])
+  }, [])
 
-  const findCurrentRound = useCallback(()=>{
-    if (!round_data?.start_time || !round_data?.end_time) return;
+  const findCurrentRound = useCallback(() => {
+    if (!round_data?.start_time || !round_data?.end_time) return
 
-    const now = new Date();
+    const now = new Date()
     for (let round of round_data) {
-      const startTime = new Date(trueUTC(round?.start_time));
-      const endTime = new Date(trueUTC(round?.end_time));
+      const startTime = new Date(trueUTC(round?.start_time))
+      const endTime = new Date(trueUTC(round?.end_time))
 
-      const isInTimeRange = now >= startTime && now <= endTime;
+      const isInTimeRange = now >= startTime && now <= endTime
       if (isInTimeRange) {
         setCurrentRound(round)
-        break;
+        break
       }
     }
-
-  },[round_data, trueUTC])
+  }, [round_data, trueUTC])
 
   const calculateTimeLeft = useCallback(() => {
     let timeLeft = {
       hours: 0,
       minutes: 0,
       seconds: 0,
-    };
+    }
 
-    if (!currentRound?.end_time) return timeLeft;
+    if (!currentRound?.end_time) return timeLeft
 
-    const difference = +new Date(currentRound?.end_time) - +new Date();
+    const difference = +new Date(currentRound?.end_time) - +new Date()
 
     if (difference > 0) {
       timeLeft = {
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
-      };
+      }
     }
 
-    return timeLeft;
-  }, [currentRound]);
+    return timeLeft
+  }, [currentRound])
 
-  const formatTime = (time:number) => (time < 10 ? `0${time}` : time);
+  const formatTime = (time: number) => (time < 10 ? `0${time}` : time)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+      setTimeLeft(calculateTimeLeft())
+    }, 1000)
 
-    return () => clearTimeout(timer);
-  }, [calculateTimeLeft]);
+    return () => clearTimeout(timer)
+  }, [calculateTimeLeft])
 
-  useEffect(()=>{ findCurrentRound() }, [findCurrentRound])
+  useEffect(() => {
+    findCurrentRound()
+  }, [findCurrentRound])
 
   return (
     <div className='ido-box grid grid-cols-7 gap-6'>
@@ -145,10 +146,14 @@ export const MainArea = ({
         </div>
 
         <div className='overflow-visible xl:overflow-y-scroll overflow-x-hidden h-full xl:max-h-[300px] space-y-2 custom-scrollbar'>
-          {
-            round_data?.map((round:any)=><PhaseItem key={round.id} data={round} isActive={round.id===currentRound.id}/>)
-          }
-          
+          {round_data?.map((round: any) => (
+            <PhaseItem
+              key={round.id}
+              data={round}
+              isActive={round.id === currentRound.id}
+            />
+          ))}
+
           {/* <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
             <p className='text-base font-medium text-[#CC2727]'>Pre Order</p>
             <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
@@ -271,7 +276,7 @@ const ValuesInfo = ({
   )
 }
 
-const VetingInfo = ({ veting } : { veting: string }) => {
+const VetingInfo = ({ veting }: { veting: string }) => {
   return (
     <div className='p-3 rounded-[8px] border border-[#3b3b3b]'>
       <p className='text-xs font-medium text-[#8e8e8e]'>Veting</p>
@@ -280,30 +285,29 @@ const VetingInfo = ({ veting } : { veting: string }) => {
   )
 }
 
-const PhaseItem = ({ data, isActive } : { data:any, isActive: boolean }) => {
+const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
   if (isActive)
     return (
       <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
         <p className='text-base font-medium text-[#CC2727]'>{data.name}</p>
         <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-          {(new Date(data.start_time+"Z")).toLocaleString("vi-VN")}
+          {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
         </p>
         <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
           Whitelist winner required. Guaranteed basis.
         </p>
       </div>
     )
-  
+
   return (
     <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
       <p className='text-base font-medium text-[#E7E7E7]'>{data.name}</p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-        {(new Date(data.start_time+"Z")).toLocaleString()}
+        {new Date(data.start_time + 'Z').toLocaleString()}
       </p>
       <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
         Whitelist winner required. Guaranteed basis.
       </p>
     </div>
   )
-
 }

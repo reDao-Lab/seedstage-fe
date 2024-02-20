@@ -1,21 +1,28 @@
 import { ProjectList } from '@/components/home/project-list'
 import StatusIco from '@/images/avail-status.png'
-import { directus } from '@/lib/directus'
+import { directus, public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 
 import Image from 'next/image'
 
 export async function AvailableProjects() {
-  const data = await directus.request(
-    readItems('ido_projects', {
+  const seedstages = await public_directus.request(
+    readItems('seedstages', {
       filter: {
         status: 'open',
       },
-      fields: ['*', 'ido_chains.*', 'token_chains.*'],
-      limit: 10,
+      fields: ['*', 'project_information.*'],
     }),
   )
-  console.log(data.length)
+
+  let data = seedstages.map((seedStage: any) => {
+    return {
+      ...seedStage.project_information,
+      status: 'open',
+    }
+  })
+
+  if (data.length === 0) return null
 
   return (
     <div className='pl-4 lg:pl-0'>
