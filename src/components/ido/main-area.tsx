@@ -17,6 +17,7 @@ interface IMainArea {
   token_network: string
   total_raise: number
   round_data: any
+  round_list: any
 }
 
 interface IIdentification {
@@ -40,6 +41,7 @@ export const MainArea = ({
   token_network,
   total_raise,
   round_data,
+  round_list,
 }: IMainArea) => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
@@ -66,7 +68,7 @@ export const MainArea = ({
     if (!round_data?.start_time || !round_data?.end_time) return
 
     const now = new Date()
-    for (let round of round_data) {
+    for (let round of round_list) {
       const startTime = new Date(trueUTC(round?.start_time))
       const endTime = new Date(trueUTC(round?.end_time))
 
@@ -146,59 +148,13 @@ export const MainArea = ({
         </div>
 
         <div className='overflow-visible xl:overflow-y-scroll overflow-x-hidden h-full xl:max-h-[300px] space-y-2 custom-scrollbar'>
-          {round_data?.map((round: any) => (
+          {round_list?.map((round: any) => (
             <PhaseItem
               key={round.id}
               data={round}
               isActive={round.id === currentRound.id}
             />
           ))}
-
-          {/* <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
-            <p className='text-base font-medium text-[#CC2727]'>Pre Order</p>
-            <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-              Jan 29, 2024 17:00 (GMT+7)
-            </p>
-            <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-              Whitelist winner required. Guaranteed basis.
-            </p>
-          </div>
-          <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
-            <p className='text-base font-medium text-[#E7E7E7]'>Pre Order</p>
-            <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-              Jan 29, 2024 17:00 (GMT+7)
-            </p>
-            <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-              Whitelist winner required. Guaranteed basis.
-            </p>
-          </div>
-          <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
-            <p className='text-base font-medium text-[#E7E7E7]'>Pre Order</p>
-            <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-              Jan 29, 2024 17:00 (GMT+7)
-            </p>
-            <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-              Whitelist winner required. Guaranteed basis.
-            </p>
-          </div>
-          <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
-            <p className='text-base font-medium text-[#E7E7E7]'>Pre Order</p>
-            <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-              Jan 29, 2024 17:00 (GMT+7)
-            </p>
-            <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-              Whitelist winner required. Guaranteed basis.
-            </p>
-          </div>
-          <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
-            <p className='text-base font-medium text-[#E7E7E7]'>Pre Order</p>
-            <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-              Jan 29, 2024 17:00 (GMT+7)
-            </p>
-            <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-              Whitelist winner required. Guaranteed basis.
-            </p>
-          </div> */}
         </div>
       </div>
     </div>
@@ -291,7 +247,7 @@ const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
       <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
         <p className='text-base font-medium text-[#CC2727]'>{data.name}</p>
         <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-          {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
+          End at: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
         </p>
         <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
           Whitelist winner required. Guaranteed basis.
@@ -303,7 +259,7 @@ const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
     <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
       <p className='text-base font-medium text-[#E7E7E7]'>{data.name}</p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-        {new Date(data.start_time + 'Z').toLocaleString()}
+        End at: {new Date(data.end_time + 'Z').toLocaleString()}
       </p>
       <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
         Whitelist winner required. Guaranteed basis.

@@ -28,9 +28,12 @@ export const ProjectList = ({ data }: any) => {
               short_description={item.short_description}
               chain='Arbitrum'
               cover_image={item.cover_image}
+              logo={item.logo}
               total_raise={item.total_raise}
               slug={item.slug}
               status={item.status || 'Opening'}
+              deposit_token={item.deposit_token}
+              chain_network={item.deposit_token.chain_network}
             />
           </SwiperSlide>
         )

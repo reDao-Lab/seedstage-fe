@@ -2,7 +2,7 @@
 import * as React from 'react'
 
 import { Button } from '../ui/button'
-import { useContractRead, useContractWrite } from 'wagmi'
+import { useContractRead, useContractWrite, useQuery } from 'wagmi'
 import payableToken from '@/abis/payableToken.json'
 import poolSaleReDAO from '@/abis/poolSaleReDAO.json'
 import { ethers } from 'ethers'
@@ -10,8 +10,8 @@ import { toast } from 'sonner'
 import { getAccount } from '@wagmi/core'
 import { ConnectWalletAction } from '../connect-wallet-action'
 interface IDepositArea {
+  roundId: string
   seedStages: any
-  merkle_proof: any
   round_index: any
   round_data: any
 }
@@ -25,12 +25,14 @@ interface IDepositData {
 interface IApproveData {
   deposit_token: any
   seedstage_contract_address: any
+  max_allocation_per_address: any
   setState: (state: boolean) => void
 }
 
 const ArppoveToken = ({
   deposit_token,
   seedstage_contract_address,
+  max_allocation_per_address,
   setState,
 }: IApproveData) => {
   const { data, isLoading, isSuccess, isError, error, write } =
@@ -52,7 +54,10 @@ const ArppoveToken = ({
     }
   }, [isSuccess, isError])
 
-  const APPROVE_AMOUNT = ethers.MaxInt256
+  const APPROVE_AMOUNT = ethers.parseUnits(
+    max_allocation_per_address.toString(),
+    deposit_token.decimal,
+  )
 
   return (
     <Button
@@ -95,7 +100,7 @@ const Deposit = ({
 
   const roundIdex = round_index
   const amount = 10000
-  const raw = merkle_proof[0].merkleProof
+  const raw = merkle_proof
   const merkleProof = raw.split('\n')
   return (
     <Button
@@ -116,10 +121,22 @@ const Deposit = ({
 export const DepositArea = ({
   seedStages,
   round_index,
-  merkle_proof,
   round_data,
+  roundId,
 }: IDepositArea) => {
   const account = getAccount()
+  const proofQuery = useQuery(
+    [roundId, account.address],
+    () => {
+      return fetch(
+        `/api/merkle-proof?account=${account.address}&round_id=${roundId}`,
+      ).then((res) => res.json())
+    },
+    {
+      enabled: !!roundId && !!account?.address,
+    },
+  )
+  const merkle_proof = proofQuery.data?.data?.merkleProof
 
   const [depositable, setstate] = React.useState<boolean>(false)
   const { data: allowance, refetch } = useContractRead({
@@ -185,6 +202,7 @@ export const DepositArea = ({
           ) : (
             <ArppoveToken
               deposit_token={seedStages.deposit_token.token_address}
+              max_allocation_per_address={round_data.max_allocation_per_address}
               seedstage_contract_address={seedStages.seedstage_contract_address}
               setState={setstate}
             />

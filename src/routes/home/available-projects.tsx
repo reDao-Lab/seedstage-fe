@@ -5,20 +5,30 @@ import { readItems } from '@directus/sdk'
 
 import Image from 'next/image'
 
+export const fetchCache = 'force-no-store'
+
 export async function AvailableProjects() {
   const seedstages = await public_directus.request(
     readItems('seedstages', {
       filter: {
         status: 'open',
       },
-      fields: ['*', 'project_information.*'],
+      fields: [
+        '*',
+        'deposit_token.*',
+        'deposit_token.chain_network.*',
+        'project_information.*',
+      ],
     }),
   )
 
   let data = seedstages.map((seedStage: any) => {
     return {
       ...seedStage.project_information,
+      deposit_token: seedStage.deposit_token,
+      chain_network: seedStage.deposit_token.chain_network,
       status: 'open',
+      total_raise: seedStage.total_raise,
     }
   })
 

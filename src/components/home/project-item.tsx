@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import StatusIco from '@/images/avail-status.png'
 
 interface IProjectItem {
   id: any
@@ -9,6 +11,9 @@ interface IProjectItem {
   status: string
   cover_image: string
   slug: string
+  logo: string
+  deposit_token: any
+  chain_network: any
 }
 
 export const ProjectItem = ({
@@ -19,7 +24,10 @@ export const ProjectItem = ({
   total_raise,
   status,
   cover_image,
+  logo,
   slug,
+  deposit_token,
+  chain_network,
 }: IProjectItem) => {
   const display_status =
     status === 'open' ? 'Opening' : status === 'upcoming' ? 'Upcoming' : 'Ended'
@@ -50,44 +58,60 @@ export const ProjectItem = ({
             >
               {display_status}
             </div>
-            <div className='bg-white py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px]'>
+            {/* <div className='bg-white py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px]'>
               Public
-            </div>
+            </div> */}
           </div>
         </span>
         <div className='px-3 pb-5'>
           <div className='space-y-2'>
-            <Link href={`/ido/${slug}`}>
-              {/* <Link href={`#`}> */}
+            <Link href={`/ido/${slug}`} className='flex items-center'>
+              {logo && (
+                <img
+                  src={`https://api.b.army/assets/${logo}`}
+                  alt='lt'
+                  className='w-[30px] rounded mr-2'
+                />
+              )}
               <h3 className='font-medium text-base text-[#e7e7e7] line-clamp-1 uppercase leading-[19px]'>
                 {name}
               </h3>
             </Link>
-            <p className='text-xs text-[#8e8e8e] line-clamp-2'>
+            <p className='text-xs text-[#8e8e8e] line-clamp-3'>
               {short_description}
             </p>
           </div>
           <div className='mt-4 mb-4 bg-black rounded-[8px] flex w-full justify-between items-center text-[#e7e7e7] font-medium text-xl px-3 py-3'>
-            <p>Raise:</p>
+            <p>Raise</p>
             <p>${total_raise}</p>
           </div>
           <div className='border-t border-t-[#3b3b3b] pt-4 w-full flex justify-between items-start'>
             <div className='space-y-1 text-left'>
               <p className='text-[#8e8e8e] font-medium text-xs'>Chain</p>
               <div className='flex items-center'>
-                <div className=''></div>
-                <p className='text-[#e7e7e7] font-medium text-sm'>{chain}</p>
+                <img
+                  src={`https://api.b.army/assets/${chain_network?.logo}`}
+                  alt='lt'
+                  className='w-8 rounded-full mr-2'
+                />
+                <p className='text-[#e7e7e7] font-medium text-sm'>
+                  {chain_network?.name}
+                </p>
               </div>
             </div>
             {status === 'open' && (
               <div className='space-y-1 text-right'>
                 <p className='text-[#8e8e8e] font-medium text-xs'>
-                  Whitelist phase end in:
+                  Deposit token
                 </p>
                 <div className='flex items-center'>
-                  <div className=''></div>
+                  <img
+                    src={`https://api.b.army/assets/${deposit_token?.icon}`}
+                    alt='lt'
+                    className='w-8 rounded mr-2'
+                  />
                   <p className='text-[#e7e7e7] font-medium text-sm'>
-                    30d : 24h : 60m : 60s
+                    {deposit_token.name}
                   </p>
                 </div>
               </div>

@@ -22,7 +22,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()],
 )
 
-const projectId = 'cb0ac00ddda350fd34a77091f9d24084'
+const projectId = '16ecab17339b29f7c87507f8a077edcf'
 
 const appInfo = {
   appName: 'ReDAO',
