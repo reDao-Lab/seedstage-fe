@@ -2,7 +2,6 @@
 
 import DiscordIco from '@/images/discord-ico.svg'
 import FbIco from '@/images/fb-ico.svg'
-import Pecland from '@/images/pecland.png'
 import TeleIco from '@/images/tele-ico.svg'
 import XIco from '@/images/x-ico.svg'
 import Image from 'next/image'
@@ -17,12 +16,14 @@ interface IMainArea {
   token_network: string
   total_raise: number
   round_data: any
-  round_list: any
+  round_list: any,
+  project_logo?: string
 }
 
 interface IIdentification {
   name: string
-  IOUName: string
+  IOUName: string,
+  img?: string
 }
 
 interface IValuesInfo {
@@ -42,6 +43,7 @@ export const MainArea = ({
   total_raise,
   round_data,
   round_list,
+  project_logo
 }: IMainArea) => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
@@ -78,7 +80,7 @@ export const MainArea = ({
         break
       }
     }
-  }, [round_data, trueUTC])
+  }, [round_data?.end_time, round_data?.start_time, round_list, trueUTC])
 
   const calculateTimeLeft = useCallback(() => {
     let timeLeft = {
@@ -119,7 +121,7 @@ export const MainArea = ({
   return (
     <div className='ido-box grid grid-cols-7 gap-6'>
       <div className='col-span-7 xl:col-span-4 space-y-6'>
-        <Identification name={name} IOUName={IOUName} />
+        <Identification name={name} IOUName={IOUName} img={project_logo}/>
         <ValuesInfo
           idoPrice={idoPrice}
           ido_network={ido_network}
@@ -161,11 +163,16 @@ export const MainArea = ({
   )
 }
 
-const Identification = ({ name, IOUName }: IIdentification) => {
+const Identification = ({ name, img, IOUName }: IIdentification) => {
   return (
-    <div className='flex '>
-      <Image src={Pecland} alt='pecland' className='w-[88px] h-[88px]' />
-      <div className='w-full pl-6'>
+    <div className='flex'>
+      {img
+      ?
+      <Image src={`https://api.b.army/assets/${img}`} alt='pecland' height={88} className='rounded-lg object-contain object-center w-[88px] h-[88px]' width={88}/>
+      :
+      null
+      }
+      <div className={`w-full ${img?"pl-6":""}`}>
         <div className='border-b border-b-[#b3b3b3] pb-2'>
           <p className='text-xl font-medium text-[#e7e7e7]'>{name}</p>
         </div>
@@ -247,7 +254,10 @@ const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
       <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
         <p className='text-base font-medium text-[#CC2727]'>{data.name}</p>
         <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-          End at: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
+          Start time: {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
+        </p>
+        <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
+          End time: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
         </p>
         <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
           Whitelist winner required. Guaranteed basis.
@@ -259,7 +269,10 @@ const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
     <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
       <p className='text-base font-medium text-[#E7E7E7]'>{data.name}</p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-        End at: {new Date(data.end_time + 'Z').toLocaleString()}
+        Start time: {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
+      </p>
+      <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
+        End time: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
       </p>
       <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
         Whitelist winner required. Guaranteed basis.

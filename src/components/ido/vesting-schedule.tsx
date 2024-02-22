@@ -1,7 +1,7 @@
 export const VestingSchedule = () => {
   return (
     <div className='ido-box space-y-6'>
-      <h2 className='text-xl font-medium text-[#e7e7e7]'>VESTING SCHEDULE</h2>
+      <h2 className='text-xl font-medium text-[#e7e7e7] uppercase'>Profit Distribution History</h2>
 
       <div className='overflow-hidden'>
         <table className='table-auto xl:w-full space-y-1 border-separate border-spacing-y-1 w-[1024px] overflow-x-scroll'>
@@ -24,18 +24,18 @@ export const VestingSchedule = () => {
               <td className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
                 1
               </td>
-              <td className='font-medium py-3'>2024-12-23, 00:00 AM </td>
-              <td className='font-medium py-3'>100%</td>
-              <td className='font-medium py-3'>999,999 BARMY</td>
-              <td className='font-medium py-3'>Claimable</td>
+              <td className='font-medium py-3'>-</td>
+              <td className='font-medium py-3'>-</td>
+              <td className='font-medium py-3'>-</td>
+              <td className='font-medium py-3'>-</td>
               <td className='font-medium py-3 pr-3 text-right rounded-tr-md rounded-br-md'>
-                On reDAO launchpad
+                -
               </td>
             </tr>
           </tbody>
         </table>
 
-        <div className='flex justify-between items-center mt-6'>
+        {/* <div className='flex justify-between items-center mt-6'>
           <div className='flex justify-center items-center gap-1'>
             <div className='text-sm bg-[#E7E7E7] text-[#0A0A0A] leading-none rounded-md w-10 h-10 flex items-center justify-center'>
               1
@@ -50,7 +50,7 @@ export const VestingSchedule = () => {
               ...
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

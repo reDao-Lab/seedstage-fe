@@ -2,7 +2,7 @@ import { Breadcrumb } from '@/components/breadcrumb'
 import { DepositArea } from '@/components/ido/deposit-area'
 import { MainArea } from '@/components/ido/main-area'
 import { VestingSchedule } from '@/components/ido/vesting-schedule'
-import { directus, merkleproof_directus, public_directus } from '@/lib/directus'
+import { public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 import { Metadata, ResolvingMetadata } from 'next'
 
@@ -94,6 +94,7 @@ export default async function IdoDetailPage({
                 total_raise={round_data?.allocation}
                 round_data={round_data}
                 round_list={[...round_list]}
+                project_logo={project_data?.project_information?.logo}
               />
               <DepositArea
                 seedStages={project_data}
