@@ -48,6 +48,7 @@ export const MainArea = ({
 }: IMainArea) => {
   const { current_round_id, set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
+    days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -87,6 +88,7 @@ export const MainArea = ({
 
   const calculateTimeLeft = useCallback(() => {
     let timeLeft = {
+      days: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
@@ -95,9 +97,9 @@ export const MainArea = ({
     if (!currentRound?.end_time) return timeLeft
 
     const difference = +new Date(currentRound?.end_time) - +new Date()
-
     if (difference > 0) {
       timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
@@ -146,6 +148,13 @@ export const MainArea = ({
             {currentRound?.name} phase end in:
           </p>
           <p className='text-center text-[#0a0a0a] text-xl mt-1.5'>
+            {timeLeft.days > 0 ? (
+              timeLeft.days === 1 ? (
+                <span>{timeLeft.days} day, </span>
+              ) : (
+                <span>{timeLeft.days} days, </span>
+              )
+            ) : null}
             <span>{formatTime(timeLeft.hours)}:</span>
             <span>{formatTime(timeLeft.minutes)}:</span>
             <span>{formatTime(timeLeft.seconds)}</span>
@@ -281,7 +290,9 @@ const PhaseItem = ({
           End time: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
         </p>
         <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-          Whitelist winner required. Guaranteed basis.
+          {data.round_type === 'whitelist'
+            ? 'Whitelist winner required. Guaranteed basis.'
+            : 'Everyone can deposit.'}
         </p>
       </div>
     )
@@ -299,7 +310,9 @@ const PhaseItem = ({
         End time: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
       </p>
       <p className='border-t border-[#3B3B3B] pt-3 text-[#E7E7E7] text-sm font-medium'>
-        Whitelist winner required. Guaranteed basis.
+        {data.round_type === 'whitelist'
+          ? 'Whitelist winner required. Guaranteed basis.'
+          : 'Everyone can deposit.'}
       </p>
     </div>
   )
