@@ -1,6 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import StatusIco from '@/images/avail-status.png'
 
 interface IProjectItem {
   id: any
@@ -40,7 +38,7 @@ export const ProjectItem = ({
 
   return (
     <div className='max-w-[324px]' key={id}>
-      <div className='space-y-5 rounded-[8px] overflow-hidden bg-[#121212]'>
+      <div className='space-y-8 rounded-[8px] overflow-hidden bg-[#121212]'>
         <span data-state='closed' className='relative'>
           <div className='relative z-[1]'>
             <Link href={`/ido/${slug}`}>
@@ -51,6 +49,15 @@ export const ProjectItem = ({
                 />
               </div>
             </Link>
+            <div className="w-[50px] h-[50px] absolute -bottom-[25px] left-3 bg-[#121212] rounded-[8px] p-0.5">
+              {logo && (
+                <img
+                  src={`https://api.b.army/assets/${logo}`}
+                  alt='lt'
+                  className='w-full aspect-square rounded'
+                />
+              )}
+            </div>
           </div>
           <div className='absolute z-[2] flex items-center gap-1.5 top-3 right-3'>
             <div
@@ -66,13 +73,6 @@ export const ProjectItem = ({
         <div className='px-3 pb-5'>
           <div className='space-y-2'>
             <Link href={`/ido/${slug}`} className='flex items-center'>
-              {logo && (
-                <img
-                  src={`https://api.b.army/assets/${logo}`}
-                  alt='lt'
-                  className='w-[30px] rounded mr-2'
-                />
-              )}
               <h3 className='font-medium text-base text-[#e7e7e7] line-clamp-1 uppercase leading-[19px]'>
                 {name}
               </h3>
