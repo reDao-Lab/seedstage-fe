@@ -6,6 +6,7 @@ import TeleIco from '@/images/tele-ico.svg'
 import XIco from '@/images/x-ico.svg'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
+import roundStore from '@/store/roundStore'
 
 interface IMainArea {
   name: string
@@ -16,13 +17,13 @@ interface IMainArea {
   token_network: string
   total_raise: number
   round_data: any
-  round_list: any,
+  round_list: any
   project_logo?: string
 }
 
 interface IIdentification {
   name: string
-  IOUName: string,
+  IOUName: string
   img?: string
 }
 
@@ -43,8 +44,9 @@ export const MainArea = ({
   total_raise,
   round_data,
   round_list,
-  project_logo
+  project_logo,
 }: IMainArea) => {
+  const { current_round_id, set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -77,6 +79,7 @@ export const MainArea = ({
       const isInTimeRange = now >= startTime && now <= endTime
       if (isInTimeRange) {
         setCurrentRound(round)
+        set_current_round_id(round.id)
         break
       }
     }
@@ -121,7 +124,7 @@ export const MainArea = ({
   return (
     <div className='ido-box grid grid-cols-7 gap-6'>
       <div className='col-span-7 xl:col-span-4 space-y-6'>
-        <Identification name={name} IOUName={IOUName} img={project_logo}/>
+        <Identification name={name} IOUName={IOUName} img={project_logo} />
         <ValuesInfo
           idoPrice={idoPrice}
           ido_network={ido_network}
@@ -155,6 +158,10 @@ export const MainArea = ({
               key={round.id}
               data={round}
               isActive={round.id === currentRound.id}
+              switch_round={(currentRound: any) => {
+                setCurrentRound(currentRound)
+                set_current_round_id(currentRound.id)
+              }}
             />
           ))}
         </div>
@@ -166,13 +173,16 @@ export const MainArea = ({
 const Identification = ({ name, img, IOUName }: IIdentification) => {
   return (
     <div className='flex'>
-      {img
-      ?
-      <Image src={`https://api.b.army/assets/${img}`} alt='pecland' height={88} className='rounded-lg object-contain object-center w-[88px] h-[88px]' width={88}/>
-      :
-      null
-      }
-      <div className={`w-full ${img?"pl-6":""}`}>
+      {img ? (
+        <Image
+          src={`https://api.b.army/assets/${img}`}
+          alt='pecland'
+          height={88}
+          className='rounded-lg object-contain object-center w-[88px] h-[88px]'
+          width={88}
+        />
+      ) : null}
+      <div className={`w-full ${img ? 'pl-6' : ''}`}>
         <div className='border-b border-b-[#b3b3b3] pb-2'>
           <p className='text-xl font-medium text-[#e7e7e7]'>{name}</p>
         </div>
@@ -248,10 +258,21 @@ const VetingInfo = ({ veting }: { veting: string }) => {
   )
 }
 
-const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
+const PhaseItem = ({
+  data,
+  isActive,
+  switch_round,
+}: {
+  data: any
+  isActive: boolean
+  switch_round: (currentRound: any) => void
+}) => {
   if (isActive)
     return (
-      <div className='border border-[#CC2727] rounded-[8px] p-2 mr-1'>
+      <div
+        className='border border-[#CC2727] rounded-[8px] p-2 mr-1 cursor-pointer'
+        onClick={() => switch_round(data)}
+      >
         <p className='text-base font-medium text-[#CC2727]'>{data.name}</p>
         <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
           Start time: {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
@@ -266,7 +287,10 @@ const PhaseItem = ({ data, isActive }: { data: any; isActive: boolean }) => {
     )
 
   return (
-    <div className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1'>
+    <div
+      className='border border-[#3B3B3B] rounded-[8px] p-2 mr-1 cursor-pointer'
+      onClick={() => switch_round(data)}
+    >
       <p className='text-base font-medium text-[#E7E7E7]'>{data.name}</p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
         Start time: {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}

@@ -49,7 +49,7 @@ export const ProjectItem = ({
                 />
               </div>
             </Link>
-            <div className="w-[50px] h-[50px] absolute -bottom-[25px] left-3 bg-[#121212] rounded-[8px] p-0.5">
+            <div className='w-[50px] h-[50px] absolute -bottom-[25px] left-3 bg-[#121212] rounded-[8px] p-0.5'>
               {logo && (
                 <img
                   src={`https://api.b.army/assets/${logo}`}

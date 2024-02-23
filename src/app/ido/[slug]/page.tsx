@@ -99,7 +99,7 @@ export default async function IdoDetailPage({
               <DepositArea
                 seedStages={project_data}
                 roundId={project_data?.rounds[0]}
-                round_data={round_data}
+                round_list={[...round_list]}
                 round_index={0}
               />
             </div>

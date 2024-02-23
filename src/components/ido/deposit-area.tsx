@@ -9,11 +9,12 @@ import { ethers } from 'ethers'
 import { toast } from 'sonner'
 import { getAccount } from '@wagmi/core'
 import { ConnectWalletAction } from '../connect-wallet-action'
+import roundStore from '@/store/roundStore'
 interface IDepositArea {
   roundId: string
   seedStages: any
   round_index: any
-  round_data: any
+  round_list: any
 }
 
 interface IDepositData {
@@ -121,10 +122,22 @@ const Deposit = ({
 export const DepositArea = ({
   seedStages,
   round_index,
-  round_data,
+  round_list,
   roundId,
 }: IDepositArea) => {
   const account = getAccount()
+  const { current_round_id, set_current_round_id } = roundStore()
+
+  const [current_round, set_current_round] = React.useState({
+    min_allocation_per_address: 0,
+    max_allocation_per_address: 0,
+  })
+
+  React.useEffect(() => {
+    const round = round_list.find((r: any) => r.id === current_round_id)
+    if (round) set_current_round(round)
+  }, [current_round_id])
+
   const proofQuery = useQuery(
     [roundId, account.address],
     () => {
@@ -152,7 +165,7 @@ export const DepositArea = ({
     : 0
 
   React.useEffect(() => {
-    if (Number(formated) >= round_data.max_allocation_per_address) {
+    if (Number(formated) >= round_list.max_allocation_per_address) {
       setstate(true)
     }
   }, [allowance])
@@ -177,14 +190,14 @@ export const DepositArea = ({
         <div className='flex flex-col lg:flex-row w-full gap-3'>
           <p className='text-[#b3b3b3] text-base'>Min allocation:</p>
           <p className='text-[#cc2727] line-clamp-1'>
-            {round_data?.min_allocation_per_address}{' '}
+            {current_round?.min_allocation_per_address}{' '}
             {seedStages?.deposit_token.name}
           </p>
         </div>
         <div className='flex flex-col lg:flex-row w-full gap-3'>
           <p className='text-[#b3b3b3] text-base'>Max allocation:</p>
           <p className='text-[#cc2727] line-clamp-1'>
-            {round_data?.max_allocation_per_address}{' '}
+            {current_round?.max_allocation_per_address}{' '}
             {seedStages?.deposit_token.name}
           </p>
         </div>
@@ -202,7 +215,9 @@ export const DepositArea = ({
           ) : (
             <ArppoveToken
               deposit_token={seedStages.deposit_token.token_address}
-              max_allocation_per_address={round_data.max_allocation_per_address}
+              max_allocation_per_address={
+                current_round.max_allocation_per_address
+              }
               seedstage_contract_address={seedStages.seedstage_contract_address}
               setState={setstate}
             />
