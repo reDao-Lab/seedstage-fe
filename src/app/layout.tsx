@@ -6,6 +6,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 import type { Metadata } from 'next'
 import { Prompt } from 'next/font/google'
 import './globals.css'
+import { Term } from '@/components/dialogs/term'
 
 const promptFont = Prompt({
   subsets: ['latin'],
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={promptFont.className}>
         <Providers>
+          <Term/>
           <Nav />
           <div className='bg-background'>
             <div className=''>
