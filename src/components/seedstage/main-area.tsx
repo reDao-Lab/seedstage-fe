@@ -1,7 +1,7 @@
 'use client'
 
 import DiscordIco from '@/images/discord-ico.svg'
-import FbIco from '@/images/fb-ico.svg'
+import WebsiteIco from '@/images/website-ico.svg'
 import TeleIco from '@/images/tele-ico.svg'
 import XIco from '@/images/x-ico.svg'
 import Image from 'next/image'
@@ -11,7 +11,7 @@ import roundStore from '@/store/roundStore'
 interface IMainArea {
   name: string
   IOUName: string
-  veting: string
+  vesting: string
   idoPrice: number
   ido_network: string
   token_network: string
@@ -19,12 +19,20 @@ interface IMainArea {
   round_data: any
   round_list: any
   project_logo?: string
+  telegram_link: string
+  website_link: string
+  x_link: string
+  discord_link: string
 }
 
 interface IIdentification {
   name: string
   IOUName: string
   img?: string
+  telegram_link: string
+  website_link: string
+  x_link: string
+  discord_link: string
 }
 
 interface IValuesInfo {
@@ -37,7 +45,7 @@ interface IValuesInfo {
 export const MainArea = ({
   name,
   IOUName,
-  veting,
+  vesting,
   idoPrice,
   ido_network,
   token_network,
@@ -45,6 +53,10 @@ export const MainArea = ({
   round_data,
   round_list,
   project_logo,
+  telegram_link,
+  website_link,
+  x_link,
+  discord_link,
 }: IMainArea) => {
   const { current_round_id, set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
@@ -126,14 +138,22 @@ export const MainArea = ({
   return (
     <div className='ido-box grid grid-cols-7 gap-6'>
       <div className='col-span-7 xl:col-span-4 space-y-6'>
-        <Identification name={name} IOUName={IOUName} img={project_logo} />
+        <Identification
+          name={name}
+          IOUName={IOUName}
+          img={project_logo}
+          x_link={x_link}
+          telegram_link={telegram_link}
+          website_link={website_link}
+          discord_link={discord_link}
+        />
         <ValuesInfo
           idoPrice={idoPrice}
           ido_network={ido_network}
           token_network={token_network}
           total_raise={total_raise}
         />
-        <VetingInfo veting={veting} />
+        <vestingInfo vesting={vesting} />
 
         {/* <div className='flex w-full justify-between items-center'>
           <p className='text-[#d65252]'>This pool requires Rookie tier</p>
@@ -145,19 +165,28 @@ export const MainArea = ({
       <div className='col-span-7 xl:col-span-3 p-3 rounded-[8px] border border-[#3b3b3b] space-y-5'>
         <div className='bg-[#e7e7e7] rounded-[8px] p-3 font-medium'>
           <p className='text-center text-xs text-[#5b5b5b]'>
-            {currentRound?.name} phase end in:
+            {currentRound?.name} Phase end in:
           </p>
           <p className='text-center text-[#0a0a0a] text-xl mt-1.5'>
-            {timeLeft.days > 0 ? (
-              timeLeft.days === 1 ? (
-                <span>{timeLeft.days} day, </span>
-              ) : (
-                <span>{timeLeft.days} days, </span>
-              )
-            ) : null}
-            <span>{formatTime(timeLeft.hours)}:</span>
-            <span>{formatTime(timeLeft.minutes)}:</span>
-            <span>{formatTime(timeLeft.seconds)}</span>
+            {timeLeft.days === 0 &&
+            timeLeft.hours === 0 &&
+            timeLeft.minutes === 0 &&
+            timeLeft.seconds === 0 ? (
+              <>Ended</>
+            ) : (
+              <>
+                {timeLeft.days > 0 ? (
+                  timeLeft.days === 1 ? (
+                    <span>{timeLeft.days} day, </span>
+                  ) : (
+                    <span>{timeLeft.days} days, </span>
+                  )
+                ) : null}
+                <span>{formatTime(timeLeft.hours)}:</span>
+                <span>{formatTime(timeLeft.minutes)}:</span>
+                <span>{formatTime(timeLeft.seconds)}</span>
+              </>
+            )}
           </p>
         </div>
 
@@ -179,12 +208,20 @@ export const MainArea = ({
   )
 }
 
-const Identification = ({ name, img, IOUName }: IIdentification) => {
+const Identification = ({
+  name,
+  img,
+  IOUName,
+  website_link,
+  telegram_link,
+  x_link,
+  discord_link,
+}: IIdentification) => {
   return (
     <div className='flex'>
       {img ? (
         <Image
-          src={`https://api.b.army/assets/${img}`}
+          src={`/assets/${img}`}
           alt='pecland'
           height={88}
           className='rounded-lg object-contain object-center w-[88px] h-[88px]'
@@ -203,18 +240,46 @@ const Identification = ({ name, img, IOUName }: IIdentification) => {
             </span>
           </div>
           <div className='flex items-center gap-2'>
-            <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
-              <Image src={FbIco} alt='Facebook icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
-              <Image src={XIco} alt='X icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
-              <Image src={TeleIco} alt='Telegram icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
-              <Image src={DiscordIco} alt='Discord icon' className='w-5 h-5' />
-            </div>
+            {website_link && (
+              <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+                <a href={website_link} target='_blank'>
+                  <Image
+                    src={WebsiteIco}
+                    alt='Discord icon'
+                    className='w-5 h-5'
+                  />
+                </a>
+              </div>
+            )}
+            {x_link && (
+              <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+                <a href={x_link} target='_blank'>
+                  <Image src={XIco} alt='X icon' className='w-5 h-5' />
+                </a>
+              </div>
+            )}
+            {telegram_link && (
+              <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+                <a href={telegram_link} target='_blank'>
+                  <Image
+                    src={TeleIco}
+                    alt='Telegram icon'
+                    className='w-5 h-5'
+                  />
+                </a>
+              </div>
+            )}
+            {discord_link && (
+              <div className='bg-transparent border border-[#3b3b3b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+                <a href={discord_link} target='_blank'>
+                  <Image
+                    src={DiscordIco}
+                    alt='Discord icon'
+                    className='w-5 h-5'
+                  />
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -231,7 +296,7 @@ const ValuesInfo = ({
   return (
     <div className='px-3 py-5 rounded-[8px] border border-[#3b3b3b] grid grid-cols-2 gap-3'>
       <div className='pl-3 col-span-1 space-y-1.5'>
-        <p className='text-xs font-medium text-[#8e8e8e]'>IDO Price</p>
+        <p className='text-xs font-medium text-[#8e8e8e]'>Token Price</p>
         <div className='flex items-center gap-2.5'>
           <p className='text-[#e7e7e7]'>{idoPrice}</p>
         </div>
@@ -258,11 +323,11 @@ const ValuesInfo = ({
   )
 }
 
-const VetingInfo = ({ veting }: { veting: string }) => {
+const vestingInfo = ({ vesting }: { vesting: string }) => {
   return (
     <div className='p-3 rounded-[8px] border border-[#3b3b3b]'>
-      <p className='text-xs font-medium text-[#8e8e8e]'>Veting</p>
-      <p className='text-base font-medium mt-1.5 text-[#e7e7e7]'>{veting}</p>
+      <p className='text-xs font-medium text-[#8e8e8e]'>vesting</p>
+      <p className='text-base font-medium mt-1.5 text-[#e7e7e7]'>{vesting}</p>
     </div>
   )
 }

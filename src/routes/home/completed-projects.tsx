@@ -5,6 +5,8 @@ import StatusIco from '@/images/completed-status.png'
 
 import Image from 'next/image'
 
+export const tags = ['all']
+
 export async function CompletedProjects() {
   const seedstages = await public_directus.request(
     readItems('seedstages', {

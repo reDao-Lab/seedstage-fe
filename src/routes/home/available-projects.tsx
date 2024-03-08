@@ -5,7 +5,7 @@ import { readItems } from '@directus/sdk'
 
 import Image from 'next/image'
 
-export const fetchCache = 'force-no-store'
+export const tags = ['all']
 
 export async function AvailableProjects() {
   const seedstages = await public_directus.request(

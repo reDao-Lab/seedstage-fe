@@ -1,31 +1,32 @@
 'use client'
 
-import { useState } from 'react';
-import { Button } from '../ui/button';
-import { Checkbox } from '../ui/checkbox';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Checkbox } from '../ui/checkbox'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 
 export const Term = () => {
-  const [open, setOpen] = useState<boolean>(!Boolean(Number(window.localStorage.getItem("ryd47-first-come"))))
+  const [open, setOpen] = useState<boolean>(
+    !Boolean(Number(window.localStorage.getItem('ryd47-first-come'))),
+  )
   const [isChecked, setIsChecked] = useState<boolean>(false) as any
 
   const onClickContinue = () => {
-    window.localStorage.setItem("ryd47-first-come", "1")
+    window.localStorage.setItem('ryd47-first-come', '1')
     setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      
       <DialogContent className='max-w-3xl'>
         <DialogHeader>
           <DialogTitle className='text-3xl'>Terms of use</DialogTitle>
         </DialogHeader>
-        <div className="ant-modal-content">
-          <div className="ant-modal-body">
-            <div className="modal_info">
-              <div className="rounded-lg bg-neutral-900 pl-4 pr-2 py-3">
-                <div className="h-[400px] overflow-y-scroll overflow-x-visible text-white custom-scrollbar font-light space-y-4">
+        <div className='ant-modal-content'>
+          <div className='ant-modal-body'>
+            <div className='modal_info'>
+              <div className='rounded-lg bg-neutral-900 pl-4 pr-2 py-3'>
+                <div className='h-[400px] overflow-y-scroll overflow-x-visible text-white custom-scrollbar font-light space-y-4'>
                   <p>
                     The following terms of use (the “Terms”) constitute an
                     agreement between you or the company or other legal entity
@@ -96,7 +97,7 @@ export const Term = () => {
                     <br />- Cambodia
                     <br />- Cayman
                     <br />- China
-                    <br />- Cote D'Ivoire (Ivory Coast)
+                    <br />- Cote DIvoire (Ivory Coast)
                     <br />- Cuba
                     <br />- Crimea and Sevastopol
                     <br />- Democratic Republic of Congo
@@ -156,7 +157,9 @@ export const Term = () => {
                     AML/CFT procedure, anti-fraud procedure, and authentication
                     checks.
                   </p>
-                  <h2 className='text-2xl font-medium'>3.RESTRICTED ACTIVITIES</h2>
+                  <h2 className='text-2xl font-medium'>
+                    3.RESTRICTED ACTIVITIES
+                  </h2>
                   <p>
                     In connection with your use of our services, you will not:
                   </p>
@@ -170,11 +173,6 @@ export const Term = () => {
                   <p>
                     (ii) provide false, inaccurate, incomplete or misleading
                     information;
-                  </p>
-                  <p>
-                    (iii) infringe upon LaunchZone's or any third party's
-                    copyright, patent, trademark, or intellectual property
-                    rights;
                   </p>
                   <p>
                     (iv) engage in any illegal activity, including without
@@ -215,19 +213,23 @@ export const Term = () => {
                     Terms, or is otherwise deemed unacceptable by LaunchZone in
                     its sole discretion.
                   </p>
-                  <h2 className='text-2xl font-medium'>4. FEES AND PRICE ESTIMATES</h2>
+                  <h2 className='text-2xl font-medium'>
+                    4. FEES AND PRICE ESTIMATES
+                  </h2>
                   <p>
                     In connection with your use of our services, you are
                     required to pay all fees necessary for interacting with the
                     blockchain networks, including “gas” costs, as well as all
-                    other fees reflected on LaunchZone’s products and/or
-                    services at the time of your use. Although we attempt to
-                    provide accurate fee information, this information reflects
-                    our estimates of fees, which may vary from the actual fees
-                    paid to use the services and interact with the blockchain
+                    other fees reflected on LaunchZones products and/or services
+                    at the time of your use. Although we attempt to provide
+                    accurate fee information, this information reflects our
+                    estimates of fees, which may vary from the actual fees paid
+                    to use the services and interact with the blockchain
                     networks.
                   </p>
-                  <h2 className='text-2xl font-medium'>5. NO PROFESSIONAL ADVICE OR FIDUCIARY DUTIES</h2>
+                  <h2 className='text-2xl font-medium'>
+                    5. NO PROFESSIONAL ADVICE OR FIDUCIARY DUTIES
+                  </h2>
                   <p>
                     not provide any other financial, investment, or legal advice
                     in connection with our service. To the extent that we or our
@@ -235,7 +237,7 @@ export const Term = () => {
                     commentary, or any other information, the act of doing so is
                     incidental to your relationship with us and such information
                     should not be construed as investment or financial advice.
-                    Any decision to buy or sell digital assets is the user’s
+                    Any decision to buy or sell digital assets is the users
                     decision and we will not be liable for any loss suffered.
                     You accept the risk of trading digital assets. In entering
                     into any transaction via LaunchZone’s products and/or
@@ -252,7 +254,10 @@ export const Term = () => {
                     owe no fiduciary duties or liabilities to you or any other
                     party.
                   </p>
-                  <h2 className='text-2xl font-medium'> 6. OWNERSHIP OF DIGITAL ASSETS</h2>
+                  <h2 className='text-2xl font-medium'>
+                    {' '}
+                    6. OWNERSHIP OF DIGITAL ASSETS
+                  </h2>
                   <p>
                     You hereby represent and warrant to us that any digital
                     assets used by you in connection with our services are
@@ -269,13 +274,15 @@ export const Term = () => {
                     transaction, or for collecting, reporting, or remitting any
                     taxes arising from any transaction.
                   </p>
-                  <h2 className='text-2xl font-medium'>8. INDEMNIFICATION; RELEASE</h2>
+                  <h2 className='text-2xl font-medium'>
+                    8. INDEMNIFICATION; RELEASE
+                  </h2>
                   <p>
                     You agree to indemnify and hold LaunchZone, its affiliates,
                     and service providers, and each of their officers,
                     directors, agents, joint ventures, employees, and
                     representatives harmless from any claim or demand (including
-                    attorneys’ fees and any losses, fines, fees, or penalties
+                    attorneys fees and any losses, fines, fees, or penalties
                     imposed by any regulatory authority) arising out of your
                     breach of these Terms, or your violation of any law or
                     regulation. The term “losses” means all net costs reasonably
@@ -311,14 +318,14 @@ export const Term = () => {
                     that we have collected (and will not do so without providing
                     a right to opt out).
                   </p>
-                  <h3>9.1 Applicability of this Policy</h3>{" "}
+                  <h3>9.1 Applicability of this Policy</h3>{' '}
                   <p>
                     This Policy applies to our services, which include the
                     services we provide on any other websites, pages, features,
                     or content we own or operating third party applications
                     relying on such an API, and related services.
-                  </p>{" "}
-                  <h3>9.2 Safety and Security</h3>{" "}
+                  </p>{' '}
+                  <h3>9.2 Safety and Security</h3>{' '}
                   <p>
                     We may use acquired information to help maintain the safety,
                     security, and integrity of you and our services, including:
@@ -331,7 +338,7 @@ export const Term = () => {
                     has no oversight, involvement, or control concerning your
                     transactions using our services. All transactions between
                     users of this open-source software are executed directly
-                    between the users’ blockchain addresses through a smart
+                    between the users blockchain addresses through a smart
                     contract.
                   </p>
                   <p>
@@ -400,7 +407,9 @@ export const Term = () => {
                     SERVICES. USE OF A VIRTUAL PRIVATE NETWORK (“VPN”) TO
                     CIRCUMVENT THE RESTRICTIONS SET FORTH HEREIN IS PROHIBITED.
                   </p>
-                  <h2 className='text-2xl font-medium'>11. LIMITATION OF LIABILITY; NO WARRANTY</h2>
+                  <h2 className='text-2xl font-medium'>
+                    11. LIMITATION OF LIABILITY; NO WARRANTY
+                  </h2>
                   <p>
                     YOU EXPRESSLY UNDERSTAND AND AGREE THAT LAUNCHZONE AND OUR
                     AFFILIATES AND SERVICE PROVIDERS, AND THEIR RESPECTIVE
@@ -469,7 +478,9 @@ export const Term = () => {
                     mechanical breakdown or data-processing failures or where we
                     are bound by other legal obligations.
                   </p>
-                  <h2 className='text-2xl font-medium'>13. GOVERNING LAW; VENUE </h2>
+                  <h2 className='text-2xl font-medium'>
+                    13. GOVERNING LAW; VENUE{' '}
+                  </h2>
                   <p>
                     The laws of Taiwan shall govern these Terms. Except as
                     otherwise required by local law, any dispute between you and
@@ -490,24 +501,26 @@ export const Term = () => {
                     assignment, you may stop using our services and terminate
                     this agreement.
                   </p>
-                  <h2 className='text-2xl font-medium'>15. THIRD PARTY CONTENT</h2>
+                  <h2 className='text-2xl font-medium'>
+                    15. THIRD PARTY CONTENT
+                  </h2>
                   <p>
                     We strives to provide accurate and reliable information and
-                    content on LaunchZone’s products and/or services, but such
+                    content on LaunchZones products and/or services, but such
                     information may not always be correct, complete, or up to
-                    date. We will update the information on LaunchZone’s
-                    products and/or services as necessary to provide you with
-                    the most up to date information, but you should always
-                    independently verify such information. LaunchZone’s products
-                    and/or services may also contain links to third party
-                    websites, applications, events or other materials (“Third
-                    Party Content”). Such information is provided for your
-                    convenience and links or references to Third Party Content
-                    do not constitute an endorsement by our products or
-                    services. We shall have no liability for any losses incurred
-                    as a result of actions taken in reliance on the information
-                    contained on LaunchZone’s products and/or services or in any
-                    Third-Party Content.
+                    date. We will update the information on LaunchZones products
+                    and/or services as necessary to provide you with the most up
+                    to date information, but you should always independently
+                    verify such information. LaunchZones products and/or
+                    services may also contain links to third party websites,
+                    applications, events or other materials (“Third Party
+                    Content”). Such information is provided for your convenience
+                    and links or references to Third Party Content do not
+                    constitute an endorsement by our products or services. We
+                    shall have no liability for any losses incurred as a result
+                    of actions taken in reliance on the information contained on
+                    LaunchZone’s products and/or services or in any Third-Party
+                    Content.
                   </p>
                   <h2 className='text-2xl font-medium'>16. AMENDMENTS</h2>
                   <p>
@@ -525,7 +538,9 @@ export const Term = () => {
                     any losses suffered by any modification or amendment of
                     these Terms.
                   </p>
-                  <h2 className='text-2xl font-medium'>17. ENTIRE AGREEMENT </h2>
+                  <h2 className='text-2xl font-medium'>
+                    17. ENTIRE AGREEMENT{' '}
+                  </h2>
                   <p>
                     The failure of LaunchZone to exercise or enforce any right
                     or provision of the Agreement shall not constitute a waiver
@@ -546,17 +561,21 @@ export const Term = () => {
               </div>
             </div>
           </div>
-          <div className="space-y-5 mt-5">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" checked={isChecked} onCheckedChange={(_)=>setIsChecked(_)}/>
+          <div className='space-y-5 mt-5'>
+            <div className='flex items-center space-x-2'>
+              <Checkbox
+                id='terms'
+                checked={isChecked}
+                onCheckedChange={(_) => setIsChecked(_)}
+              />
               <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor='terms'
+                className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
               >
                 Accept terms and conditions
               </label>
             </div>
-            <div className="flex w-full justify-center">
+            <div className='flex w-full justify-center'>
               <Button onClick={onClickContinue} disabled={!isChecked}>
                 Continue
               </Button>
@@ -565,5 +584,5 @@ export const Term = () => {
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

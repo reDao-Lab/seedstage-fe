@@ -33,7 +33,7 @@ export const ProjectList = ({ data }: any) => {
               slug={item.slug}
               status={item.status || 'Opening'}
               deposit_token={item.deposit_token}
-              chain_network={item.deposit_token.chain_network}
+              chain_network={item?.deposit_token?.chain_network}
             />
           </SwiperSlide>
         )

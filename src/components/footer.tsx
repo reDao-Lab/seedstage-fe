@@ -18,18 +18,33 @@ export const Footer = () => {
             </p>
           </div>
           <div className='flex items-center gap-2'>
-            <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+            {/* <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
               <Image src={FbIco} alt='Facebook icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+            </div> */}
+            <a
+              href='https://twitter.com/reDaoAnn'
+              target='_blank'
+              className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'
+            >
               <Image src={XIco} alt='X icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+            </a>
+            <a
+              href='https://t.me/launchzoneann'
+              target='_blank'
+              className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'
+            >
               <Image src={TeleIco} alt='Telegram icon' className='w-5 h-5' />
-            </div>
-            <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
+            </a>
+            <a
+              href='https://t.me/lzofficial'
+              target='_blank'
+              className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'
+            >
+              <Image src={TeleIco} alt='Telegram icon' className='w-5 h-5' />
+            </a>
+            {/* <div className='bg-[#5b5b5b] w-9 h-9 rounded-[6px] flex items-center justify-center'>
               <Image src={DiscordIco} alt='Discord icon' className='w-5 h-5' />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

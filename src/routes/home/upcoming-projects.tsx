@@ -4,6 +4,7 @@ import { public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 
 import Image from 'next/image'
+export const tags = ['all']
 
 export async function UpcomingProjects() {
   const seedstages = await public_directus.request(

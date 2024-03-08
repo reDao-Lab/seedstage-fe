@@ -1,20 +1,38 @@
 import { Breadcrumb } from '@/components/breadcrumb'
-import { DepositArea } from '@/components/ido/deposit-area'
-import { MainArea } from '@/components/ido/main-area'
-import { VestingSchedule } from '@/components/ido/vesting-schedule'
+import { DepositArea } from '@/components/seedstage/deposit-area'
+import { MainArea } from '@/components/seedstage/main-area'
+import { VestingSchedule } from '@/components/seedstage/vesting-schedule'
 import { public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 import { Metadata, ResolvingMetadata } from 'next'
 
+export const tags = ['all']
 export const fetchCache = 'force-no-store'
 
 export async function generateMetadata(
   { params }: { params: { slug: string } },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const seedStages = await public_directus.request(
+    readItems('seedstages', {
+      filter: {
+        status: 'open' || 'upcoming' || 'completed',
+      },
+      fields: [
+        '*',
+        'iou_token.token_address',
+        'deposit_token.*',
+        'project_information.*',
+      ],
+    }),
+  )
+
+  const project_data = seedStages.find((s: any) => {
+    return s.project_information.slug === params.slug
+  })
   return {
-    title: `Revolutionizing Blockchain Technology`,
-    description: 'short_description',
+    title: project_data.name,
+    description: project_data.short_description,
   }
 }
 
@@ -77,7 +95,7 @@ export default async function IdoDetailPage({
               <Breadcrumb
                 list={[
                   { name: 'Home', path: '/' },
-                  { name: 'Detail Project', path: '/ido/' + params.slug },
+                  { name: 'Detail Project', path: '/seedstage/' + params.slug },
                 ]}
               />
             </div>
@@ -87,14 +105,18 @@ export default async function IdoDetailPage({
               <MainArea
                 name={project_data?.project_information.name}
                 IOUName={project_data?.iou_token.token_address}
-                veting={'25% TGE, 1month cliff, linear vest over 4 months'}
+                vesting={'25% TGE, 1month cliff, linear vest over 4 months'}
                 idoPrice={0.0}
                 ido_network={'Arbitrum'}
                 token_network={'Arbitrum'}
-                total_raise={round_data?.allocation}
+                total_raise={project_data?.total_raise}
                 round_data={round_data}
                 round_list={[...round_list]}
                 project_logo={project_data?.project_information?.logo}
+                telegram_link={project_data?.project_information?.telegram_link}
+                website_link={project_data?.project_information?.website_link}
+                x_link={project_data?.project_information?.x_link}
+                discord_link={project_data?.project_information?.discord_link}
               />
               <DepositArea
                 seedStages={project_data}

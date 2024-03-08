@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/assets/:path',
+        destination: 'https://api.b.army/assets/:path',
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       {

@@ -2,12 +2,15 @@ import { AvailableProjects } from '@/routes/home/available-projects'
 import { CompletedProjects } from '@/routes/home/completed-projects'
 import { HeroSection } from '@/routes/home/hero-section'
 import { UpcomingProjects } from '@/routes/home/upcoming-projects'
+import ShareImage from '@/images/banner.jpeg'
 
+export const fetchCache = 'force-no-store'
+export const tags = ['all']
 export const metadata = {
   title: 'ReDAO Launchpad - Pioneering IDO Platform for Crypto Innovators',
   description:
     'Join ReDAO Launchpad, the premier platform for launching and participating in Initial DEX Offerings (IDOs). Connect with groundbreaking crypto projects and be part of the financial revolution.',
-  image: 'https://example.com/launchpad-image.jpg',
+  image: ShareImage,
   url: 'https://www.redaolaunchpad.com',
   twitterCard: 'summary_large_image',
   twitterSite: '@ReDAOLaunchpad',

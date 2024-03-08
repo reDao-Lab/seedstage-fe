@@ -41,10 +41,10 @@ export const ProjectItem = ({
       <div className='space-y-8 rounded-[8px] overflow-hidden bg-[#121212]'>
         <span data-state='closed' className='relative'>
           <div className='relative z-[1]'>
-            <Link href={`/ido/${slug}`}>
-              <div className='w-full h-[182px] overflow-hidden'>
+            <Link href={`/seedstage/${slug}`}>
+              <div className='w-full h-full overflow-hidden'>
                 <img
-                  src={`https://api.b.army/assets/${cover_image}`}
+                  src={`/assets/${cover_image}`}
                   className='w-full h-full object-cover object-center transition-all hover:scale-105'
                 />
               </div>
@@ -52,7 +52,7 @@ export const ProjectItem = ({
             <div className='w-[50px] h-[50px] absolute -bottom-[25px] left-3 bg-[#121212] rounded-[8px] p-0.5'>
               {logo && (
                 <img
-                  src={`https://api.b.army/assets/${logo}`}
+                  src={`/assets/${logo}`}
                   alt='lt'
                   className='w-full aspect-square rounded'
                 />
@@ -72,7 +72,7 @@ export const ProjectItem = ({
         </span>
         <div className='px-3 pb-5'>
           <div className='space-y-2'>
-            <Link href={`/ido/${slug}`} className='flex items-center'>
+            <Link href={`/seedstage/${slug}`} className='flex items-center'>
               <h3 className='font-medium text-base text-[#e7e7e7] line-clamp-1 uppercase leading-[19px]'>
                 {name}
               </h3>
@@ -90,7 +90,7 @@ export const ProjectItem = ({
               <p className='text-[#8e8e8e] font-medium text-xs'>Chain</p>
               <div className='flex items-center'>
                 <img
-                  src={`https://api.b.army/assets/${chain_network?.logo}`}
+                  src={`/assets/${chain_network?.logo}`}
                   alt='lt'
                   className='w-8 rounded-full mr-2'
                 />
@@ -106,7 +106,7 @@ export const ProjectItem = ({
                 </p>
                 <div className='flex items-center'>
                   <img
-                    src={`https://api.b.army/assets/${deposit_token?.icon}`}
+                    src={`/assets/${deposit_token?.icon}`}
                     alt='lt'
                     className='w-8 rounded mr-2'
                   />

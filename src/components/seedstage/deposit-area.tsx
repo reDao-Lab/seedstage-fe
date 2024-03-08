@@ -38,7 +38,7 @@ const ArppoveToken = ({
 }: IApproveData) => {
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
-      address: deposit_token,
+      address: deposit_token.token_address,
       abi: payableToken,
       functionName: 'approve',
     })
@@ -53,13 +53,12 @@ const ArppoveToken = ({
         description: error?.message,
       })
     }
-  }, [isSuccess, isError])
+  }, [isSuccess, isError, setState, error?.message])
 
   const APPROVE_AMOUNT = ethers.parseUnits(
-    max_allocation_per_address.toString(),
+    String(max_allocation_per_address),
     deposit_token.decimal,
   )
-
   return (
     <Button
       size={'custom'}
@@ -97,7 +96,7 @@ const Deposit = ({
         description: error?.message,
       })
     }
-  }, [isSuccess, isError])
+  }, [isSuccess, isError, error?.message])
 
   const roundIdex = round_index
   const amount = 10000
@@ -136,7 +135,7 @@ export const DepositArea = ({
   React.useEffect(() => {
     const round = round_list.find((r: any) => r.id === current_round_id)
     if (round) set_current_round(round)
-  }, [current_round_id])
+  }, [current_round_id, round_list])
 
   const proofQuery = useQuery(
     [roundId, account.address],
@@ -168,18 +167,12 @@ export const DepositArea = ({
     if (Number(formated) >= round_list.max_allocation_per_address) {
       setstate(true)
     }
-  }, [allowance])
+  }, [formated, round_list.max_allocation_per_address])
 
   return (
     <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
       <div className='space-y-3'>
         <h2 className='text-xl text-[#e7e7e7] uppercase'>Deposit</h2>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Smart Contract:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {seedStages?.seedstage_contract_address}
-          </p>
-        </div>
         <div className='flex flex-col lg:flex-row w-full gap-3'>
           <p className='text-[#b3b3b3] text-base'>Deposit token:</p>
           <p className='text-[#cc2727] line-clamp-1'>
@@ -214,7 +207,7 @@ export const DepositArea = ({
             />
           ) : (
             <ArppoveToken
-              deposit_token={seedStages.deposit_token.token_address}
+              deposit_token={seedStages.deposit_token}
               max_allocation_per_address={
                 current_round.max_allocation_per_address
               }
