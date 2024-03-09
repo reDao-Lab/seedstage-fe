@@ -1,15 +1,17 @@
 'use client'
 import * as React from 'react'
 
-import { Button } from '../ui/button'
-import { useContractRead, useContractWrite, useQuery } from 'wagmi'
 import payableToken from '@/abis/payableToken.json'
 import poolSaleReDAO from '@/abis/poolSaleReDAO.json'
+import roundStore from '@/store/roundStore'
+import { getAccount } from '@wagmi/core'
 import { ethers } from 'ethers'
 import { toast } from 'sonner'
-import { getAccount } from '@wagmi/core'
+import { useContractRead, useContractWrite, useQuery } from 'wagmi'
 import { ConnectWalletAction } from '../connect-wallet-action'
-import roundStore from '@/store/roundStore'
+import { DepositDialog } from '../dialogs/deposit'
+import { Button } from '../ui/button'
+import { Progress } from '../ui/progress'
 interface IDepositArea {
   roundId: string
   seedStages: any
@@ -80,6 +82,8 @@ const Deposit = ({
   seedstage_contract_address,
   round_index,
 }: IDepositData) => {
+  const [depositDialoOpen, setDepositDialogOpen] = React.useState(false)
+
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
       address: seedstage_contract_address,
@@ -103,18 +107,24 @@ const Deposit = ({
   const raw = merkle_proof
   const merkleProof = raw.split('\n')
   return (
-    <Button
-      size={'custom'}
-      onClick={() =>
-        write({
-          args: [roundIdex, amount, merkleProof],
-        })
-      }
-      className='uppercase'
-      disabled={isLoading}
-    >
-      Deposit
-    </Button>
+    <>
+      <Button
+        size={'custom'}
+        // onClick={() =>
+        //   write({
+        //     args: [roundIdex, amount, merkleProof],
+        //   })
+        // }
+        onClick={()=>{
+          setDepositDialogOpen(true)
+        }}
+        className='uppercase'
+        disabled={isLoading}
+        >
+        Deposit
+      </Button>
+      <DepositDialog open={depositDialoOpen} onClose={()=>{setDepositDialogOpen(false)}} onSubmit={()=>{setDepositDialogOpen(false)}}/>
+    </>
   )
 }
 
@@ -132,6 +142,8 @@ export const DepositArea = ({
     max_allocation_per_address: 0,
   })
 
+  const [progressPercent, setProgressPercent] = React.useState(0)
+
   React.useEffect(() => {
     const round = round_list.find((r: any) => r.id === current_round_id)
     if (round) set_current_round(round)
@@ -139,10 +151,10 @@ export const DepositArea = ({
 
   const proofQuery = useQuery(
     [roundId, account.address],
-    () => {
-      return fetch(
-        `/api/merkle-proof?account=${account.address}&round_id=${roundId}`,
-      ).then((res) => res.json())
+    async () => {
+      const res = await fetch(
+        `/api/merkle-proof?account=${account.address}&round_id=${roundId}`)
+      return await res.json()
     },
     {
       enabled: !!roundId && !!account?.address,
@@ -162,6 +174,11 @@ export const DepositArea = ({
   const formated = allowance
     ? ethers.formatUnits(allowance, deposit_decimals)
     : 0
+
+  // TADAAAAAAAAA
+  const handleProgressChange = React.useCallback((currentValue : number, maxValue : number) => {
+    setProgressPercent(100/maxValue*(currentValue>maxValue?maxValue:currentValue))
+  },[])
 
   React.useEffect(() => {
     if (Number(formated) >= round_list.max_allocation_per_address) {
@@ -194,6 +211,8 @@ export const DepositArea = ({
             {seedStages?.deposit_token.name}
           </p>
         </div>
+
+        <Progress value={progressPercent} className="w-full" />
       </div>
       {!account.address ? (
         <ConnectWalletAction />
