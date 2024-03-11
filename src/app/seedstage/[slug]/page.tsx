@@ -16,7 +16,9 @@ export async function generateMetadata(
   const seedStages = await public_directus.request(
     readItems('seedstages', {
       filter: {
-        status: 'open' || 'upcoming' || 'completed',
+        status: {
+          _in: ['open', 'upcoming', 'completed'],
+        },
       },
       fields: [
         '*',
@@ -53,11 +55,14 @@ export default async function IdoDetailPage({
   const seedStages = await public_directus.request(
     readItems('seedstages', {
       filter: {
-        status: 'open' || 'upcoming' || 'completed',
+        status: {
+          _in: ['open', 'upcoming', 'completed'],
+        },
       },
       fields: [
         '*',
         'iou_token.token_address',
+        'iou_token.symbol',
         'deposit_token.*',
         'project_information.*',
       ],
@@ -71,7 +76,7 @@ export default async function IdoDetailPage({
   let round_list = []
   let round_data: any
 
-  for (let round_id of project_data.rounds) {
+  for (let round_id of project_data?.rounds) {
     const round = await public_directus.request(
       readItems('seedstage_rounds', {
         filter: {
@@ -104,7 +109,8 @@ export default async function IdoDetailPage({
             <div className='mt-3 space-y-3 px-3 xl:px-0'>
               <MainArea
                 name={project_data?.project_information.name}
-                IOUName={project_data?.iou_token.token_address}
+                iouSymbol={project_data?.iou_token.symbol}
+                iouTokenAddress={project_data?.iou_token.token_address}
                 vesting={'25% TGE, 1month cliff, linear vest over 4 months'}
                 idoPrice={0.0}
                 ido_network={'Arbitrum'}
@@ -122,7 +128,6 @@ export default async function IdoDetailPage({
                 seedStages={project_data}
                 roundId={project_data?.rounds[0]}
                 round_list={[...round_list]}
-                round_index={0}
               />
             </div>
 

@@ -26,7 +26,7 @@ export default function Home() {
           <HeroSection />
           <div className='space-y-20 block mx-auto max-w-[1280px] mt-20'>
             <AvailableProjects />
-            <UpcomingProjects />
+            {/* <UpcomingProjects /> */}
             <CompletedProjects />
           </div>
         </div>

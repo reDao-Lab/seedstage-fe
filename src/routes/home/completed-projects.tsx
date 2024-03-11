@@ -11,16 +11,25 @@ export async function CompletedProjects() {
   const seedstages = await public_directus.request(
     readItems('seedstages', {
       filter: {
-        status: 'completed',
+        status: {
+          _in: ['completed'],
+        },
       },
-      fields: ['*', 'project_information.*'],
+      fields: [
+        '*',
+        'deposit_token.*',
+        'deposit_token.chain_network.*',
+        'project_information.*',
+      ],
     }),
   )
 
   let data = seedstages.map((seedStage: any) => {
     return {
+      deposit_token: seedStage.deposit_token,
+      chain_network: seedStage.deposit_token.chain_network,
       ...seedStage.project_information,
-      status: 'completed',
+      ...seedStage,
     }
   })
 

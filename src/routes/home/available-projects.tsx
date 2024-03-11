@@ -11,7 +11,9 @@ export async function AvailableProjects() {
   const seedstages = await public_directus.request(
     readItems('seedstages', {
       filter: {
-        status: 'open',
+        status: {
+          _in: ['open', 'upcoming'],
+        },
       },
       fields: [
         '*',
@@ -24,11 +26,10 @@ export async function AvailableProjects() {
 
   let data = seedstages.map((seedStage: any) => {
     return {
-      ...seedStage.project_information,
       deposit_token: seedStage.deposit_token,
       chain_network: seedStage.deposit_token.chain_network,
-      status: 'open',
-      total_raise: seedStage.total_raise,
+      ...seedStage.project_information,
+      ...seedStage,
     }
   })
 

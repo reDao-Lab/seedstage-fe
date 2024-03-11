@@ -37,7 +37,7 @@ export const ProjectItem = ({
         : 'bg-[#CC2727]'
 
   return (
-    <div className='max-w-[324px]' key={id}>
+    <div className='max-w-[324px] max-h-[432px]' key={id}>
       <div className='space-y-8 rounded-[8px] overflow-hidden bg-[#121212]'>
         <span data-state='closed' className='relative'>
           <div className='relative z-[1]'>
@@ -45,7 +45,7 @@ export const ProjectItem = ({
               <div className='w-full h-full overflow-hidden'>
                 <img
                   src={`/assets/${cover_image}`}
-                  className='w-full h-full object-cover object-center transition-all hover:scale-105'
+                  className='w-[324px] h-[108px] object-cover object-center transition-all hover:scale-105'
                 />
               </div>
             </Link>
@@ -81,13 +81,14 @@ export const ProjectItem = ({
               {short_description}
             </p>
           </div>
-          <div className='mt-4 mb-4 bg-black rounded-[8px] flex w-full justify-between items-center text-[#e7e7e7] font-medium text-xl px-3 py-3'>
-            <p>Raise</p>
-            <p>${total_raise}</p>
+          <div className='mt-4 mb-4 bg-black rounded-[8px] flex w-full justify-between items-center text-[#e7e7e7] font-medium p-3'>
+            <p className='text-sm'>Total Raise</p>
+            <p className=''>${total_raise}</p>
           </div>
+
           <div className='border-t border-t-[#3b3b3b] pt-4 w-full flex justify-between items-start'>
             <div className='space-y-1 text-left'>
-              <p className='text-[#8e8e8e] font-medium text-xs'>Chain</p>
+              <p className='text-[#8e8e8e] font-medium text-xs'>Raise Chain</p>
               <div className='flex items-center'>
                 <img
                   src={`/assets/${chain_network?.logo}`}
@@ -99,23 +100,21 @@ export const ProjectItem = ({
                 </p>
               </div>
             </div>
-            {status === 'open' && (
-              <div className='space-y-1 text-right'>
-                <p className='text-[#8e8e8e] font-medium text-xs'>
-                  Deposit token
+            <div className='space-y-1 text-right'>
+              <p className='text-[#8e8e8e] font-medium text-xs'>
+                Deposit token
+              </p>
+              <div className='flex items-center'>
+                <img
+                  src={`/assets/${deposit_token?.icon}`}
+                  alt='lt'
+                  className='w-8 rounded mr-2'
+                />
+                <p className='text-[#e7e7e7] font-medium text-sm'>
+                  {deposit_token.name}
                 </p>
-                <div className='flex items-center'>
-                  <img
-                    src={`/assets/${deposit_token?.icon}`}
-                    alt='lt'
-                    className='w-8 rounded mr-2'
-                  />
-                  <p className='text-[#e7e7e7] font-medium text-sm'>
-                    {deposit_token.name}
-                  </p>
-                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

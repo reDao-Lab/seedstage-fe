@@ -31,7 +31,7 @@ export const ProjectList = ({ data }: any) => {
               logo={item.logo}
               total_raise={item.total_raise}
               slug={item.slug}
-              status={item.status || 'Opening'}
+              status={item.status}
               deposit_token={item.deposit_token}
               chain_network={item?.deposit_token?.chain_network}
             />

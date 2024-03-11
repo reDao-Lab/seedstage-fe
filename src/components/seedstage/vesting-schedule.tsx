@@ -6,7 +6,7 @@ export const VestingSchedule = () => {
       </h2>
 
       <div className='overflow-hidden'>
-        <table className='table-auto xl:w-full space-y-1 border-separate border-spacing-y-1 w-[1024px] overflow-x-scroll'>
+        <table className='table-auto xl:w-full space-y-1 border-separate border-spacing-y-1 w-full overflow-x-scroll'>
           <thead className=''>
             <tr className='text-[#5B5B5B] text-left bg-[#0A0A0A]'>
               <th className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
@@ -16,7 +16,7 @@ export const VestingSchedule = () => {
               <th className='font-medium py-3'>Percentage</th>
               <th className='font-medium py-3'>Amount</th>
               <th className='font-medium py-3'>Status</th>
-              <th className='font-medium py-3 pr-3 text-right rounded-tr-md rounded-br-md'>
+              <th className='font-medium py-3 pr-3 rounded-tr-md rounded-br-md'>
                 Claim Type
               </th>
             </tr>
@@ -26,12 +26,48 @@ export const VestingSchedule = () => {
               <td className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
                 1
               </td>
-              <td className='font-medium py-3'>-</td>
-              <td className='font-medium py-3'>-</td>
-              <td className='font-medium py-3'>-</td>
-              <td className='font-medium py-3'>-</td>
-              <td className='font-medium py-3 pr-3 text-right rounded-tr-md rounded-br-md'>
-                -
+              <td className='font-medium py-3'>-------</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3 pr-3 rounded-tr-md rounded-br-md'>
+                ---------------
+              </td>
+            </tr>
+            <tr className='bg-[#0A0A0A] text-[#E7E7E7] text-left'>
+              <td className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
+                2
+              </td>
+              <td className='font-medium py-3'>-------</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3 pr-3 rounded-tr-md rounded-br-md'>
+                ---------------
+              </td>
+            </tr>
+            <tr className='bg-[#0A0A0A] text-[#E7E7E7] text-left'>
+              <td className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
+                3
+              </td>
+              <td className='font-medium py-3'>-------</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3 pr-3 rounded-tr-md rounded-br-md'>
+                ---------------
+              </td>
+            </tr>
+            <tr className='bg-[#0A0A0A] text-[#E7E7E7] text-left'>
+              <td className='font-medium py-3 pl-3 rounded-tl-md rounded-bl-md'>
+                4
+              </td>
+              <td className='font-medium py-3'>-------</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3'>-----</td>
+              <td className='font-medium py-3 pr-3 rounded-tr-md rounded-br-md'>
+                ---------------
               </td>
             </tr>
           </tbody>
