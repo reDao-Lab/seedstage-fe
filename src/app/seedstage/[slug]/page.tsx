@@ -123,11 +123,13 @@ export default async function IdoDetailPage({
                 website_link={project_data?.project_information?.website_link}
                 x_link={project_data?.project_information?.x_link}
                 discord_link={project_data?.project_information?.discord_link}
+                seedstage_status={project_data?.status}
               />
               <DepositArea
                 seedStages={project_data}
                 roundId={project_data?.rounds[0]}
                 round_list={[...round_list]}
+                seedstage_status={project_data?.status}
               />
             </div>
 

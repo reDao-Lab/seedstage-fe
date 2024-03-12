@@ -5,6 +5,7 @@ import payableToken from '@/abis/payableToken.json'
 import poolSaleReDAO from '@/abis/poolSaleReDAO.json'
 import roundStore from '@/store/roundStore'
 import { getAccount } from '@wagmi/core'
+import { useNetwork } from 'wagmi'
 import { ethers } from 'ethers'
 import { toast } from 'sonner'
 import { useContractRead, useContractWrite, useQuery } from 'wagmi'
@@ -13,10 +14,12 @@ import { ConnectWalletAction } from '../connect-wallet-action'
 import { DepositDialog } from '../dialogs/deposit'
 import { Button } from '../ui/button'
 import { Progress } from '../ui/progress'
+import { useCallback } from 'react'
 interface IDepositArea {
   roundId: string
   seedStages: any
   round_list: any
+  seedstage_status: string
 }
 
 interface IDepositData {
@@ -103,8 +106,10 @@ const Deposit = ({
   React.useEffect(() => {
     if (isSuccess) {
       toast('Transaction success')
+      setDepositDialogOpen(false)
     }
     if (isError) {
+      setDepositDialogOpen(false)
       toast('Transaction failed!', {
         description: error?.message,
       })
@@ -112,7 +117,7 @@ const Deposit = ({
   }, [isSuccess, isError, error?.message])
 
   const raw = merkle_proof
-  const merkleProof = raw.split('\n')
+  const merkleProof = raw?.split('\n')
 
   const onClickConfirm = (enterAmount: any) => {
     const converted = ethers.parseUnits(enterAmount.toString(), deposit_decimal)
@@ -152,8 +157,10 @@ export const DepositArea = ({
   seedStages,
   round_list,
   roundId,
+  seedstage_status,
 }: IDepositArea) => {
   const account = getAccount()
+  const network = useNetwork()
   const { current_round_id } = roundStore()
   const [current_round, set_current_round] = React.useState({
     min_allocation_per_address: 0,
@@ -181,20 +188,27 @@ export const DepositArea = ({
   )
   const merkle_proof = proofQuery.data?.data?.merkleProof
 
-  const [depositable, setstate] = React.useState<boolean>(false)
-  const { data: allowance, refetch } = useContractRead({
-    address: seedStages.deposit_token.token_address,
-    abi: payableToken,
-    functionName: 'allowance',
-    args: [account.address, seedStages?.seedstage_contract_address],
-  })
+  const [depositable, set_depositale] = React.useState<boolean>(false)
+  const checkAllownce = async () => {
+    const allowance = await readContract({
+      address: seedStages.deposit_token.token_address,
+      abi: payableToken,
+      functionName: 'allowance',
+      args: [account.address, seedStages?.seedstage_contract_address],
+    })
 
-  const deposit_decimals = seedStages.deposit_token.decimal
-  const formated = allowance
-    ? ethers.formatUnits(allowance, deposit_decimals)
-    : 0
+    const deposit_decimals = seedStages.deposit_token.decimal
+    const formated = allowance
+      ? ethers.formatUnits(allowance.toString(), deposit_decimals)
+      : 0
+    if (Number(formated) >= current_round.min_allocation_per_address) {
+      set_depositale(true)
+    } else {
+      set_depositale(false)
+    }
+  }
 
-  const fetchRounds = async () => {
+  const fetchRounds = useCallback(async () => {
     const index = round_list.indexOf(current_round)
     if (index < 0) return
     const data = await readContract({
@@ -214,30 +228,37 @@ export const DepositArea = ({
     const currentValue = Object.values(data)[6]?.toString()
     const maxValue = Object.values(data)[1]?.toString()
     handleProgressChange(Number(currentValue), Number(maxValue))
-  }
+  }, [current_round])
   // TADAAAAAAAAA
   const handleProgressChange = React.useCallback(
     (currentValue: number, maxValue: number) => {
+      if (currentValue === 0) {
+        setProgressPercent(0)
+        return
+      }
       setProgressPercent(
-        (100 / maxValue) * (currentValue > maxValue ? maxValue : currentValue),
+        Number(
+          (
+            (100 / maxValue) *
+            (currentValue > maxValue ? maxValue : currentValue)
+          ).toFixed(2),
+        ),
       )
     },
     [],
   )
 
   React.useEffect(() => {
-    if (!account) return
+    if (!account.address || network?.chain?.id !== 42161) return
+    checkAllownce()
     fetchRounds()
-    setInterval(() => {
+    const fetchRoundInterval = setInterval(() => {
       fetchRounds()
     }, 30 * 1000) // miliseconds
-  }, [account, current_round])
-
-  React.useEffect(() => {
-    if (Number(formated) >= current_round.max_allocation_per_address) {
-      setstate(true)
+    return () => {
+      clearInterval(fetchRoundInterval)
     }
-  }, [formated, current_round.max_allocation_per_address])
+  }, [account, fetchRounds, network?.chain?.id, depositable])
 
   return (
     <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
@@ -270,47 +291,55 @@ export const DepositArea = ({
           <div className='flex font-bold'>{progressPercent} %</div>
         </div>
       </div>
-      {round_list.indexOf(current_round) < 0 ? (
-        <Button size={'custom'} className='uppercase' disabled={true}>
-          Round Ended
-        </Button>
-      ) : (
+      {seedstage_status === 'open' ? (
         <>
-          {!account.address ? (
-            <ConnectWalletAction />
+          {round_list.indexOf(current_round) < 0 ? (
+            <Button size={'custom'} className='uppercase' disabled={true}>
+              Round Ended
+            </Button>
           ) : (
             <>
-              {depositable ? (
-                <Deposit
-                  seedstage_contract_address={
-                    seedStages.seedstage_contract_address
-                  }
-                  round_list={round_list}
-                  current_round={current_round}
-                  merkle_proof={merkle_proof}
-                  deposit_decimal={seedStages.deposit_token.decimal}
-                  min_allocation_amount={
-                    current_round?.min_allocation_per_address
-                  }
-                  max_allocation_amount={
-                    current_round?.max_allocation_per_address
-                  }
-                />
+              {!account.address || network?.chain?.id !== 42161 ? (
+                <ConnectWalletAction />
               ) : (
-                <ArppoveToken
-                  deposit_token={seedStages.deposit_token}
-                  max_allocation_per_address={
-                    current_round.max_allocation_per_address
-                  }
-                  seedstage_contract_address={
-                    seedStages.seedstage_contract_address
-                  }
-                  setState={setstate}
-                />
+                <>
+                  {depositable ? (
+                    <Deposit
+                      seedstage_contract_address={
+                        seedStages.seedstage_contract_address
+                      }
+                      round_list={round_list}
+                      current_round={current_round}
+                      merkle_proof={merkle_proof}
+                      deposit_decimal={seedStages.deposit_token.decimal}
+                      min_allocation_amount={
+                        current_round?.min_allocation_per_address
+                      }
+                      max_allocation_amount={
+                        current_round?.max_allocation_per_address
+                      }
+                    />
+                  ) : (
+                    <ArppoveToken
+                      deposit_token={seedStages.deposit_token}
+                      max_allocation_per_address={
+                        current_round.max_allocation_per_address
+                      }
+                      seedstage_contract_address={
+                        seedStages.seedstage_contract_address
+                      }
+                      setState={set_depositale}
+                    />
+                  )}
+                </>
               )}
             </>
           )}
         </>
+      ) : (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          {seedstage_status === 'upcoming' ? 'Upcoming' : 'Completed'}
+        </Button>
       )}
     </div>
   )

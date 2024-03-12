@@ -24,6 +24,7 @@ interface IMainArea {
   website_link: string
   x_link: string
   discord_link: string
+  seedstage_status: string
 }
 
 interface IIdentification {
@@ -61,6 +62,7 @@ export const MainArea = ({
   website_link,
   x_link,
   discord_link,
+  seedstage_status,
 }: IMainArea) => {
   const { current_round_id, set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
@@ -170,27 +172,33 @@ export const MainArea = ({
       <div className='col-span-7 xl:col-span-3 p-3 rounded-[8px] border border-[#3b3b3b] space-y-5'>
         <div className='bg-[#e7e7e7] rounded-[8px] p-3 font-medium'>
           <p className='text-center text-[#0a0a0a] text-xl mt-1.5'>
-            {timeLeft.days === 0 &&
-            timeLeft.hours === 0 &&
-            timeLeft.minutes === 0 &&
-            timeLeft.seconds === 0 ? (
-              <>Round Ended</>
-            ) : (
+            {seedstage_status === 'open' ? (
               <>
-                <p className='text-center text-xs text-[#5b5b5b]'>
-                  {currentRound?.name} Phase end in:
-                </p>
-                {timeLeft.days > 0 ? (
-                  timeLeft.days === 1 ? (
-                    <span>{timeLeft.days} day, </span>
-                  ) : (
-                    <span>{timeLeft.days} days, </span>
-                  )
-                ) : null}
-                <span>{formatTime(timeLeft.hours)}:</span>
-                <span>{formatTime(timeLeft.minutes)}:</span>
-                <span>{formatTime(timeLeft.seconds)}</span>
+                {timeLeft.days === 0 &&
+                timeLeft.hours === 0 &&
+                timeLeft.minutes === 0 &&
+                timeLeft.seconds === 0 ? (
+                  <>Round Ended</>
+                ) : (
+                  <>
+                    <p className='text-center text-xs text-[#5b5b5b]'>
+                      {currentRound?.name} Phase end in:
+                    </p>
+                    {timeLeft.days > 0 ? (
+                      timeLeft.days === 1 ? (
+                        <span>{timeLeft.days} day, </span>
+                      ) : (
+                        <span>{timeLeft.days} days, </span>
+                      )
+                    ) : null}
+                    <span>{formatTime(timeLeft.hours)}:</span>
+                    <span>{formatTime(timeLeft.minutes)}:</span>
+                    <span>{formatTime(timeLeft.seconds)}</span>
+                  </>
+                )}
               </>
+            ) : (
+              <>{seedstage_status === 'upcoming' ? 'Upcoming' : 'Completed'}</>
             )}
           </p>
         </div>
@@ -323,7 +331,7 @@ const ValuesInfo = ({
           </div>
         </div>
       </div>
-      <div className='border border-[#3b3b3b] rounded-md px-5 py-[8.5px] w-fit text-xs font-medium text-[#bebebe]'>
+      <div className='border border-[#3b3b3b] rounded-md px-5 py-[8.5px] w-fit text-xs font-medium text-[#bebebe] mt-2'>
         ${iouSymbol}:{' '}
         <span className='text-balance font-medium text-[#e7e7e7]'>
           {iouTokenAddress}

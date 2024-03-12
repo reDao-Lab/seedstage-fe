@@ -11,6 +11,7 @@ export function ConnectWalletAction() {
           account,
           chain,
           openConnectModal,
+          openChainModal,
           authenticationStatus,
           mounted,
         }) => {
@@ -22,7 +23,6 @@ export function ConnectWalletAction() {
             account &&
             chain &&
             (!authenticationStatus || authenticationStatus === 'authenticated')
-
           return (
             <div
               {...(!ready && {
@@ -44,6 +44,22 @@ export function ConnectWalletAction() {
                     >
                       Connect Wallet
                     </Button>
+                  )
+                }
+                if (chain.id !== 42161) {
+                  return (
+                    <>
+                      <Button
+                        size={'custom'}
+                        className='uppercase'
+                        onClick={openChainModal}
+                      >
+                        Wrong Network
+                      </Button>
+                      <p className='pt-2 text-center text-[#b3b3b3] text-xs'>
+                        Switch to Arbitrum
+                      </p>
+                    </>
                   )
                 }
                 return null
