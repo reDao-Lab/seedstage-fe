@@ -163,6 +163,8 @@ export const DepositArea = ({
   const network = useNetwork()
   const { current_round_id } = roundStore()
   const [current_round, set_current_round] = React.useState({
+    start_time: '',
+    end_time: '',
     min_allocation_per_address: 0,
     max_allocation_per_address: 0,
   })
@@ -287,6 +289,79 @@ export const DepositArea = ({
     current_round,
   ])
 
+  const renderActionButton = () => {
+    if (seedstage_status === 'upcoming') {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Upcoming
+        </Button>
+      )
+    }
+    if (seedstage_status === 'completed') {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Completed
+        </Button>
+      )
+    }
+    if (round_list.indexOf(current_round) < 0) {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Round Ended
+        </Button>
+      )
+    }
+    if (!account.address || network?.chain?.id !== 42161) {
+      return <ConnectWalletAction />
+    }
+    if (deposited_amount > 0) {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Deposited {deposited_amount} {seedStages?.deposit_token.name}
+        </Button>
+      )
+    }
+
+    const current_start_time = current_round.start_time
+    if (new Date(current_start_time).getTime() > Date.now()) {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Upcoming
+        </Button>
+      )
+    }
+    const current_end_time = current_round.end_time
+    if (new Date(current_end_time).getTime() < Date.now()) {
+      return (
+        <Button size={'custom'} className='uppercase' disabled={true}>
+          Round Ended
+        </Button>
+      )
+    }
+
+    if (depositable) {
+      return (
+        <Deposit
+          seedstage_contract_address={seedStages.seedstage_contract_address}
+          round_list={round_list}
+          current_round={current_round}
+          merkle_proof={merkle_proof}
+          deposit_decimal={seedStages.deposit_token.decimal}
+          min_allocation_amount={current_round?.min_allocation_per_address}
+          max_allocation_amount={current_round?.max_allocation_per_address}
+        />
+      )
+    }
+    return (
+      <ArppoveToken
+        deposit_token={seedStages.deposit_token}
+        max_allocation_per_address={current_round.max_allocation_per_address}
+        seedstage_contract_address={seedStages.seedstage_contract_address}
+        setState={set_depositale}
+      />
+    )
+  }
+
   return (
     <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
       <div className='space-y-3'>
@@ -318,69 +393,7 @@ export const DepositArea = ({
           <div className='flex font-bold'>{progressPercent} %</div>
         </div>
       </div>
-      {seedstage_status === 'open' ? (
-        <>
-          {round_list.indexOf(current_round) < 0 ? (
-            <Button size={'custom'} className='uppercase' disabled={true}>
-              Round Ended
-            </Button>
-          ) : (
-            <>
-              {!account.address || network?.chain?.id !== 42161 ? (
-                <ConnectWalletAction />
-              ) : (
-                <>
-                  {deposited_amount > 0 ? (
-                    <Button
-                      size={'custom'}
-                      className='uppercase'
-                      disabled={true}
-                    >
-                      Deposited {deposited_amount}{' '}
-                      {seedStages?.deposit_token.name}
-                    </Button>
-                  ) : (
-                    <>
-                      {depositable ? (
-                        <Deposit
-                          seedstage_contract_address={
-                            seedStages.seedstage_contract_address
-                          }
-                          round_list={round_list}
-                          current_round={current_round}
-                          merkle_proof={merkle_proof}
-                          deposit_decimal={seedStages.deposit_token.decimal}
-                          min_allocation_amount={
-                            current_round?.min_allocation_per_address
-                          }
-                          max_allocation_amount={
-                            current_round?.max_allocation_per_address
-                          }
-                        />
-                      ) : (
-                        <ArppoveToken
-                          deposit_token={seedStages.deposit_token}
-                          max_allocation_per_address={
-                            current_round.max_allocation_per_address
-                          }
-                          seedstage_contract_address={
-                            seedStages.seedstage_contract_address
-                          }
-                          setState={set_depositale}
-                        />
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </>
-      ) : (
-        <Button size={'custom'} className='uppercase' disabled={true}>
-          {seedstage_status === 'upcoming' ? 'Upcoming' : 'Completed'}
-        </Button>
-      )}
+      {renderActionButton()}
     </div>
   )
 }
