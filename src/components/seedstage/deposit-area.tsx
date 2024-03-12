@@ -188,8 +188,9 @@ export const DepositArea = ({
   )
   const merkle_proof = proofQuery.data?.data?.merkleProof
 
+  const [deposited_amount, set_deposited_amount] = React.useState<any>(0)
   const [depositable, set_depositale] = React.useState<boolean>(false)
-  const checkAllownce = async () => {
+  const checkAllownce = useCallback(async () => {
     const allowance = await readContract({
       address: seedStages.deposit_token.token_address,
       abi: payableToken,
@@ -206,7 +207,24 @@ export const DepositArea = ({
     } else {
       set_depositale(false)
     }
-  }
+  }, [account.address])
+
+  const getUserDeposits = useCallback(async () => {
+    const index = round_list.indexOf(current_round)
+    if (index < 0) return
+    const data = await readContract({
+      address: seedStages?.seedstage_contract_address,
+      abi: poolSaleReDAO,
+      functionName: 'userDeposits',
+      args: [Number(index), account.address],
+    })
+    if (!data) return set_deposited_amount(0)
+    const deposit_decimals = seedStages.deposit_token.decimal
+    const formated = ethers.formatUnits(data.toString(), deposit_decimals)
+    if (Number(formated) > 0) {
+      set_deposited_amount(Number(formated))
+    }
+  }, [current_round, account.address])
 
   const fetchRounds = useCallback(async () => {
     const index = round_list.indexOf(current_round)
@@ -250,6 +268,7 @@ export const DepositArea = ({
 
   React.useEffect(() => {
     if (!account.address || network?.chain?.id !== 42161) return
+    getUserDeposits()
     checkAllownce()
     fetchRounds()
     const fetchRoundInterval = setInterval(() => {
@@ -258,7 +277,15 @@ export const DepositArea = ({
     return () => {
       clearInterval(fetchRoundInterval)
     }
-  }, [account, fetchRounds, network?.chain?.id, depositable])
+  }, [
+    account,
+    getUserDeposits,
+    checkAllownce,
+    fetchRounds,
+    network?.chain?.id,
+    depositable,
+    current_round,
+  ])
 
   return (
     <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
@@ -303,33 +330,46 @@ export const DepositArea = ({
                 <ConnectWalletAction />
               ) : (
                 <>
-                  {depositable ? (
-                    <Deposit
-                      seedstage_contract_address={
-                        seedStages.seedstage_contract_address
-                      }
-                      round_list={round_list}
-                      current_round={current_round}
-                      merkle_proof={merkle_proof}
-                      deposit_decimal={seedStages.deposit_token.decimal}
-                      min_allocation_amount={
-                        current_round?.min_allocation_per_address
-                      }
-                      max_allocation_amount={
-                        current_round?.max_allocation_per_address
-                      }
-                    />
+                  {deposited_amount > 0 ? (
+                    <Button
+                      size={'custom'}
+                      className='uppercase'
+                      disabled={true}
+                    >
+                      Deposited {deposited_amount}{' '}
+                      {seedStages?.deposit_token.name}
+                    </Button>
                   ) : (
-                    <ArppoveToken
-                      deposit_token={seedStages.deposit_token}
-                      max_allocation_per_address={
-                        current_round.max_allocation_per_address
-                      }
-                      seedstage_contract_address={
-                        seedStages.seedstage_contract_address
-                      }
-                      setState={set_depositale}
-                    />
+                    <>
+                      {depositable ? (
+                        <Deposit
+                          seedstage_contract_address={
+                            seedStages.seedstage_contract_address
+                          }
+                          round_list={round_list}
+                          current_round={current_round}
+                          merkle_proof={merkle_proof}
+                          deposit_decimal={seedStages.deposit_token.decimal}
+                          min_allocation_amount={
+                            current_round?.min_allocation_per_address
+                          }
+                          max_allocation_amount={
+                            current_round?.max_allocation_per_address
+                          }
+                        />
+                      ) : (
+                        <ArppoveToken
+                          deposit_token={seedStages.deposit_token}
+                          max_allocation_per_address={
+                            current_round.max_allocation_per_address
+                          }
+                          seedstage_contract_address={
+                            seedStages.seedstage_contract_address
+                          }
+                          setState={set_depositale}
+                        />
+                      )}
+                    </>
                   )}
                 </>
               )}
