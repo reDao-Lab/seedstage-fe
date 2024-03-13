@@ -40,7 +40,7 @@ export const ProjectItem = ({
     <div className='max-w-[324px] max-h-[432px]' key={id}>
       <div className='space-y-8 rounded-[8px] overflow-hidden bg-[#121212]'>
         <span data-state='closed' className='relative'>
-          <div className='relative z-[1]'>
+          <div className='relative z-[1] select-none'>
             <Link href={`/seedstage/${slug}`}>
               <div className='w-full h-full overflow-hidden'>
                 <img
