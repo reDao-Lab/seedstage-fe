@@ -9,34 +9,45 @@ import { Metadata, ResolvingMetadata } from 'next'
 export const tags = ['all']
 export const fetchCache = 'force-no-store'
 
-export async function generateMetadata(
-  { params }: { params: { slug: string } },
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
-  const seedStages = await public_directus.request(
-    readItems('seedstages', {
-      filter: {
-        status: {
-          _in: ['open', 'upcoming', 'completed'],
-        },
-      },
-      fields: [
-        '*',
-        'iou_token.token_address',
-        'deposit_token.*',
-        'project_information.*',
-      ],
-    }),
-  )
+export const metadata = {
+  metadataBase: new URL('https://redao-launchpad.vercel.app'),
 
-  const project_data = seedStages.find((s: any) => {
-    return s.project_information.slug === params.slug
-  })
-  return {
-    title: project_data.name,
-    description: project_data.short_description,
-  }
+  title:
+    'reDAOSeedStage - Igniting the Potential of Early-Stage Top-Tier Projects',
+  description: `reDAOSeedStage is the premier platform for elevating early-stage, top-tier projects, offering unparalleled support through capital, networks, and mentorship. We are dedicated to transforming visionary ideas into industry leaders, fostering innovation and growth from the ground up. Join our ecosystem and be a part of shaping the future's leading solutions.`,
+  openGraph: {
+    images: '/banner.jpeg',
+  },
 }
+
+// export async function generateMetadata(
+//   { params }: { params: { slug: string } },
+//   parent: ResolvingMetadata,
+// ): Promise<Metadata> {
+//   const seedStages = await public_directus.request(
+//     readItems('seedstages', {
+//       filter: {
+//         status: {
+//           _in: ['open', 'upcoming', 'completed'],
+//         },
+//       },
+//       fields: [
+//         '*',
+//         'iou_token.token_address',
+//         'deposit_token.*',
+//         'project_information.*',
+//       ],
+//     }),
+//   )
+
+//   const project_data = seedStages.find((s: any) => {
+//     return s.project_information.slug === params.slug
+//   })
+//   return {
+//     title: project_data.name,
+//     description: project_data.short_description,
+//   }
+// }
 
 const is_current_round = (start_time: any, end_time: any) => {
   if (
@@ -135,7 +146,7 @@ export default async function IdoDetailPage({
 
             <div className='mt-3 px-3 xl:px-0'>
               <div
-                className='ido-box prose dark:prose-invert max-w-none'
+                className='ido-box prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
                   __html: project_data.project_information.content,
                 }}

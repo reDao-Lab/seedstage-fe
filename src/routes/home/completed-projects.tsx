@@ -35,7 +35,11 @@ export async function CompletedProjects() {
 
   return (
     <div className='mt-10 pl-4 lg:pl-0'>
-      <ProjectList data={data} icon={StatusIco} listName={'Completed Projects'}/>
+      <ProjectList
+        data={data}
+        icon={StatusIco}
+        listName={'Completed Projects'}
+      />
     </div>
   )
 }

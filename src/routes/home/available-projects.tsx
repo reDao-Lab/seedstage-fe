@@ -3,7 +3,6 @@ import StatusIco from '@/images/avail-status.png'
 import { public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
 
-
 export const tags = ['all']
 
 export async function AvailableProjects() {
@@ -36,7 +35,11 @@ export async function AvailableProjects() {
 
   return (
     <div className='pl-4 lg:pl-0'>
-      <ProjectList data={data} icon={StatusIco} listName={'Available Projects'}/>
+      <ProjectList
+        data={data}
+        icon={StatusIco}
+        listName={'Available Projects'}
+      />
     </div>
   )
 }

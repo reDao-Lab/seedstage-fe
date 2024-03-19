@@ -1,21 +1,24 @@
 import { AvailableProjects } from '@/routes/home/available-projects'
 import { CompletedProjects } from '@/routes/home/completed-projects'
 import { HeroSection } from '@/routes/home/hero-section'
-import { UpcomingProjects } from '@/routes/home/upcoming-projects'
-import ShareImage from '@/images/banner.jpeg'
 
 export const fetchCache = 'force-no-store'
 export const tags = ['all']
 export const metadata = {
-  title: 'ReDAO Launchpad - Pioneering IDO Platform for Crypto Innovators',
-  description:
-    'Join ReDAO Launchpad, the premier platform for launching and participating in Initial DEX Offerings (IDOs). Connect with groundbreaking crypto projects and be part of the financial revolution.',
-  image: ShareImage,
-  url: 'https://www.redaolaunchpad.com',
-  twitterCard: 'summary_large_image',
-  twitterSite: '@ReDAOLaunchpad',
-  twitterCreator: '@ReDAOLaunchpad',
-  facebookAppId: 'YOUR_FACEBOOK_APP_ID',
+  metadataBase: new URL('https://redao-launchpad.vercel.app'),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'de-DE': '/de-DE',
+    },
+  },
+  title:
+    'reDAOSeedStage - Igniting the Potential of Early-Stage Top-Tier Projects',
+  description: `reDAOSeedStage is the premier platform for elevating early-stage, top-tier projects, offering unparalleled support through capital, networks, and mentorship. We are dedicated to transforming visionary ideas into industry leaders, fostering innovation and growth from the ground up. Join our ecosystem and be a part of shaping the future's leading solutions.`,
+  openGraph: {
+    images: '/banner.jpeg',
+  },
 }
 
 export default function Home() {
