@@ -1,9 +1,9 @@
 'use client'
 
-import DiscordIco from '@/images/discord-ico.svg'
-import WebsiteIco from '@/images/website-ico.svg'
-import TeleIco from '@/images/tele-ico.svg'
-import XIco from '@/images/x-ico.svg'
+import DiscordIco from '@/whitelabel-config/images/social-icons/discord-ico.svg'
+import WebsiteIco from '@/whitelabel-config/images/social-icons/website-ico.svg'
+import TeleIco from '@/whitelabel-config/images/social-icons/tele-ico.svg'
+import XIco from '@/whitelabel-config/images/social-icons/x-ico.svg'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import roundStore from '@/store/roundStore'

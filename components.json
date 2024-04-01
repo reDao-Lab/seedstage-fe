@@ -13,6 +13,7 @@
   "aliases": {
     "abis": "@/abis",
     "components": "@/components",
-    "utils": "@/lib/utils"
+    "utils": "@/lib/utils",
+    "whitelabel-config": "@/whitelabel-config"
   }
 }

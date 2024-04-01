@@ -1,11 +1,12 @@
 import { AvailableProjects } from '@/routes/home/available-projects'
 import { CompletedProjects } from '@/routes/home/completed-projects'
 import { HeroSection } from '@/routes/home/hero-section'
+import { Whitelabel_data } from '@/whitelabel-config/content'
 
 export const fetchCache = 'force-no-store'
 export const tags = ['all']
 export const metadata = {
-  metadataBase: new URL('https://redao-launchpad.vercel.app'),
+  metadataBase: new URL(Whitelabel_data.site_url),
   alternates: {
     canonical: '/',
     languages: {
@@ -13,11 +14,10 @@ export const metadata = {
       'de-DE': '/de-DE',
     },
   },
-  title:
-    'reDAOSeedStage - Igniting the Potential of Early-Stage Top-Tier Projects',
-  description: `reDAOSeedStage is the premier platform for elevating early-stage, top-tier projects, offering unparalleled support through capital, networks, and mentorship. We are dedicated to transforming visionary ideas into industry leaders, fostering innovation and growth from the ground up. Join our ecosystem and be a part of shaping the future's leading solutions.`,
+  title: Whitelabel_data.site_title,
+  description: Whitelabel_data.site_description,
   openGraph: {
-    images: '/banner.jpeg',
+    images: '/sharing-image.jpeg',
   },
 }
 
