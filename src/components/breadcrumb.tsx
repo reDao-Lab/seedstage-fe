@@ -18,7 +18,7 @@ export const Breadcrumb = ({ list }: IBreadcrumb) => {
         <div key={idx} className='flex items-center gap-3'>
           <Link href={_.path || ''}>
             <p
-              className={`${idx === list.length - 1 ? 'text-[#cc2727]' : 'text-[#e7e7e7]'} text-base font-medium`}
+              className={`${idx === list.length - 1 ? 'text-primary' : 'text-[#e7e7e7]'} text-base font-medium`}
             >
               {_.name}
             </p>

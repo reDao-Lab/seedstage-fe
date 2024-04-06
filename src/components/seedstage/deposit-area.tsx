@@ -4,17 +4,15 @@ import * as React from 'react'
 import payableToken from '@/abis/payableToken.json'
 import poolSaleReDAO from '@/abis/poolSaleReDAO.json'
 import roundStore from '@/store/roundStore'
-import { getAccount } from '@wagmi/core'
-import { useNetwork } from 'wagmi'
+import { getAccount, readContract } from '@wagmi/core'
 import { ethers } from 'ethers'
+import { useCallback } from 'react'
 import { toast } from 'sonner'
-import { useContractRead, useContractWrite, useQuery } from 'wagmi'
-import { readContract } from '@wagmi/core'
+import { useContractWrite, useNetwork, useQuery } from 'wagmi'
 import { ConnectWalletAction } from '../connect-wallet-action'
 import { DepositDialog } from '../dialogs/deposit'
 import { Button } from '../ui/button'
 import { Progress } from '../ui/progress'
-import { useCallback } from 'react'
 interface IDepositArea {
   roundId: string
   seedStages: any
@@ -363,37 +361,41 @@ export const DepositArea = ({
   }
 
   return (
-    <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
-      <div className='space-y-3'>
-        <h2 className='text-xl text-[#e7e7e7] uppercase'>Deposit</h2>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Deposit token:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {seedStages?.deposit_token.name} (
-            {seedStages?.deposit_token.token_address})
-          </p>
-        </div>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Min allocation:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {current_round?.min_allocation_per_address}{' '}
-            {seedStages?.deposit_token.name}
-          </p>
-        </div>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Max allocation:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {current_round?.max_allocation_per_address}{' '}
-            {seedStages?.deposit_token.name}
-          </p>
-        </div>
+    <div className="ido-box">
+      <h2 className='text-[32px] leading-[40px] font-bold text-white uppercase pb-6 border-b border-[#3B3B3B]'>Deposit</h2>
 
-        <div className='flex w-full justify-between items-center'>
-          <Progress value={progressPercent} className='w-[90%]' />
-          <div className='flex font-bold'>{progressPercent} %</div>
+      <div className='flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6 pt-6'>
+        <div className=''>
+          <div className="space-y-3">
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Deposit token:</p>
+              <p className='text-white line-clamp-1'>
+                {seedStages?.deposit_token.name} (
+                {seedStages?.deposit_token.token_address})
+              </p>
+            </div>
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Min allocation:</p>
+              <p className='text-white line-clamp-1'>
+                {current_round?.min_allocation_per_address}{' '}
+                {seedStages?.deposit_token.name}
+              </p>
+            </div>
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Max allocation:</p>
+              <p className='text-white line-clamp-1'>
+                {current_round?.max_allocation_per_address}{' '}
+                {seedStages?.deposit_token.name}
+              </p>
+            </div>
+          </div>
         </div>
+        {renderActionButton()}
       </div>
-      {renderActionButton()}
+      <div className='flex w-full justify-between items-center mt-6'>
+        <Progress value={progressPercent} className='w-[95%] bg-[#888888]' />
+        <div className='flex font-bold'>{progressPercent} %</div>
+      </div>
     </div>
   )
 }

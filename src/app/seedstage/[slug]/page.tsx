@@ -4,7 +4,6 @@ import { MainArea } from '@/components/seedstage/main-area'
 import { VestingSchedule } from '@/components/seedstage/vesting-schedule'
 import { public_directus } from '@/lib/directus'
 import { readItems } from '@directus/sdk'
-import { Metadata, ResolvingMetadata } from 'next'
 
 export const tags = ['all']
 export const fetchCache = 'force-no-store'
@@ -104,7 +103,7 @@ export default async function IdoDetailPage({
 
   return (
     <div className='relative'>
-      <div className='home-bg relative z-[2] pb-[120px]'>
+      <div className='home-bg relative z-[2] pb-[120px] pt-[107px]'>
         <div className='space-y-20 block mx-auto max-w-[1280px]'>
           <section>
             <div className='px-3 xl:px-0'>
@@ -117,7 +116,7 @@ export default async function IdoDetailPage({
             </div>
             {/* <div className="text-2xl font-bold">{project.name}</div> */}
 
-            <div className='mt-3 space-y-3 px-3 xl:px-0'>
+            <div className='mt-3 space-y-8 px-3 xl:px-0'>
               <MainArea
                 name={project_data?.project_information.name}
                 iouSymbol={project_data?.iou_token.symbol}
@@ -144,24 +143,26 @@ export default async function IdoDetailPage({
               />
             </div>
 
-            <div className='mt-3 px-3 xl:px-0'>
+            <div className='ido-box mt-8'>
+              <h2 className='text-[32px] leading-[40px] font-bold text-white uppercase pb-6 border-b border-[#3B3B3B] mb-6'>Description</h2>
+
               <div
-                className='ido-box prose !prose-invert max-w-none'
+                className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data.project_information.content,
+                  __html: project_data?.project_information.content,
                 }}
               ></div>
             </div>
 
-            <div className='mt-3 px-3 xl:px-0'>
+            <div className='mt-8 px-3 xl:px-0'>
               <VestingSchedule />
             </div>
           </section>
         </div>
       </div>
       <div className='absolute z-[1] w-full h-full top-0 left-0 overflow-hidden'>
-        <div className='w-[744px] aspect-square rounded-full bg-[#cc2727] absolute -left-[500px] top-[100px]'></div>
-        <div className='w-[744px] aspect-square rounded-full bg-[#cc2727] absolute right-[20px] -bottom-[400px]'></div>
+        <div className='w-[744px] aspect-square rounded-full bg-primary absolute -left-[500px] top-[100px]'></div>
+        <div className='w-[744px] aspect-square rounded-full bg-primary absolute right-[20px] -bottom-[400px]'></div>
       </div>
     </div>
   )

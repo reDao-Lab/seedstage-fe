@@ -22,7 +22,7 @@ export const Nav = () => {
   }, [login])
 
   return (
-    <div className='bg-[#0A0A0A]/50 flex justify-center relative z-50 px-4 xl:px-0'>
+    <div className='flex justify-center absolute z-50 px-4 xl:px-0 w-full'>
       <div className='flex py-6 items-center max-w-[1280px] w-full'>
         <Link href={'/'}>
           <Logo />

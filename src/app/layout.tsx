@@ -4,11 +4,11 @@ import { Toaster } from '@/components/ui/sonner'
 import Providers from '@/providers/provider'
 import '@rainbow-me/rainbowkit/styles.css'
 import type { Metadata } from 'next'
-import { Prompt } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import { Term } from '@/components/dialogs/term'
 import './globals.css'
 
-const promptFont = Prompt({
+const promptFont = Montserrat({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 })
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={promptFont.className}>
+      <body className={`${promptFont.className} relative`}> 
         <Providers>
           <Term />
           <Nav />
