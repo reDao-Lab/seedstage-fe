@@ -152,6 +152,27 @@ export default async function IdoDetailPage({
                   __html: project_data?.project_information.content,
                 }}
               ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Backers/Investors/Partners</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: project_data?.project_information.backers_investors_partners,
+                }}
+              ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Team</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: project_data?.project_information.team,
+                }}
+              ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>TOkenomics</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: project_data?.project_information.tokenomics,
+                }}
+              ></div>
             </div>
 
             <div className='mt-8 px-3 xl:px-0'>

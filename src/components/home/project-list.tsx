@@ -58,11 +58,12 @@ export const ProjectList = ({ data, icon, listName }: any) => {
           className='w-full'
         >
           {data.map((item: any) => {
+            console.log(item)
             return (
               <SwiperSlide key={item.id} className='!w-[295px]'>
                 <ProjectItem
                   id={item.id}
-                  name={item.name}
+                  name={item.project_information.name}
                   short_description={item.short_description}
                   chain='Arbitrum'
                   cover_image={item.cover_image}
