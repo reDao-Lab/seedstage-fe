@@ -1,9 +1,8 @@
+import axiosClient from '@/app/api/axiosClient'
 import { Breadcrumb } from '@/components/breadcrumb'
 import { DepositArea } from '@/components/seedstage/deposit-area'
 import { MainArea } from '@/components/seedstage/main-area'
 import { VestingSchedule } from '@/components/seedstage/vesting-schedule'
-import { public_directus } from '@/lib/directus'
-import { readItems } from '@directus/sdk'
 
 export const tags = ['all']
 export const fetchCache = 'force-no-store'
@@ -62,38 +61,40 @@ export default async function IdoDetailPage({
 }: {
   params: { slug: string }
 }) {
-  const seedStages = await public_directus.request(
-    readItems('seedstages', {
-      filter: {
-        status: {
-          _in: ['open', 'upcoming', 'completed'],
-        },
-      },
-      fields: [
-        '*',
-        'iou_token.token_address',
-        'iou_token.symbol',
-        'deposit_token.*',
-        'project_information.*',
-      ],
-    }),
-  )
+  // const seedStages = await public_directus.request(
+  //   readItems('seedstages', {
+  //     filter: {
+  //       status: {
+  //         _in: ['open', 'upcoming', 'completed'],
+  //       },
+  //     },
+  //     fields: [
+  //       '*',
+  //       'iou_token.token_address',
+  //       'iou_token.symbol',
+  //       'deposit_token.*',
+  //       'project_information.*',
+  //     ],
+  //   }),
+  // )
 
-  const project_data = seedStages.find((s: any) => {
-    return s.project_information.slug === params.slug
-  })
+  // console.log(21, params);
 
+  // const project_data = seedStages.find((s: any) => {
+  //   return s.project_information.slug === params.slug
+  // })
+
+  const project_data = (await axiosClient.get("/externals/seedStagesByProjectId?projectId=" + params.slug)).data
+
+  console.log(112, params.slug, "/externals/seedStagesByProjectId?projectId=" + params.slug, project_data)
+  
   let round_list = []
   let round_data: any
-
-  for (let round_id of project_data?.rounds) {
-    const round = await public_directus.request(
-      readItems('seedstage_rounds', {
-        filter: {
-          id: round_id,
-        },
-      }),
-    )
+  
+  for (let _ of project_data) {
+    let round:any = (await axiosClient.get("/externals/getRounds/" + _.seedStageAddress))
+    
+    console.log(113, round)
     const is_current = is_current_round(round[0].start_time, round[0].end_time)
     if (is_current) {
       round_data = round[0]
@@ -118,9 +119,9 @@ export default async function IdoDetailPage({
 
             <div className='mt-3 space-y-8 px-3 xl:px-0'>
               <MainArea
-                name={project_data?.project_information.name}
-                iouSymbol={project_data?.iou_token.symbol}
-                iouTokenAddress={project_data?.iou_token.token_address}
+                name={project_data[0]?.project?.projectName}
+                iouSymbol={project_data[0]?.iouTokenInfo?.symbol}
+                iouTokenAddress={project_data[0]?.iouTokenInfo?.tokenAddress}
                 vesting={'25% TGE, 1month cliff, linear vest over 4 months'}
                 idoPrice={0.0}
                 ido_network={'Arbitrum'}
@@ -128,16 +129,16 @@ export default async function IdoDetailPage({
                 total_raise={project_data?.total_raise}
                 round_data={round_data}
                 round_list={[...round_list]}
-                project_logo={project_data?.project_information?.logo}
-                telegram_link={project_data?.project_information?.telegram_link}
-                website_link={project_data?.project_information?.website_link}
-                x_link={project_data?.project_information?.x_link}
-                discord_link={project_data?.project_information?.discord_link}
+                project_logo={project_data[0]?.project?.logo}
+                telegram_link={project_data[0]?.project?.telegram}
+                website_link={project_data[0]?.project?.website}
+                x_link={project_data[0]?.project?.twitter}
+                discord_link={project_data[0]?.project?.discord}
                 seedstage_status={project_data?.status}
               />
               <DepositArea
                 seedStages={project_data}
-                roundId={project_data?.rounds[0]}
+                roundId={""}
                 round_list={[...round_list]}
                 seedstage_status={project_data?.status}
               />
@@ -149,28 +150,28 @@ export default async function IdoDetailPage({
               <div
                 className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data?.project_information.content,
+                  __html: "<content-missing>"
                 }}
               ></div>
               <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Backers/Investors/Partners</h2>
               <div
                 className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data?.project_information.backers_investors_partners,
+                  __html: "<backers_investors_partners-missing>",
                 }}
               ></div>
               <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Team</h2>
               <div
                 className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data?.project_information.team,
+                  __html: "<team-missing>"
                 }}
               ></div>
               <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>TOkenomics</h2>
               <div
                 className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data?.project_information.tokenomics,
+                  __html: "<tokenomics-missing>"
                 }}
               ></div>
             </div>

@@ -44,10 +44,10 @@ export const ProjectItem = ({
       <div className='space-y-6 overflow-hidden bg-transparent'>
         <span data-state='closed' className='relative'>
           <div className='relative z-[1] select-none'>
-            <Link href={`/seedstage/${slug}`}>
+            <Link href={`/seedstage/${id}`}>
               <div className='w-full h-full overflow-hidden rounded-[12px]'>
                 <img
-                  src={`/assets/${cover_image}`}
+                  src={cover_image}
                   className='w-[324px] h-[200px] object-cover object-center transition-all hover:scale-105'
                 />
               </div>
@@ -55,7 +55,7 @@ export const ProjectItem = ({
             <div className='w-20 h-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-0.5'>
               {logo && (
                 <img
-                  src={`/assets/${logo}`}
+                  src={logo}
                   alt='lt'
                   className='w-full aspect-square rounded'
                 />

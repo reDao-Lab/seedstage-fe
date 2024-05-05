@@ -31,21 +31,21 @@ interface IDepositData {
 }
 
 interface IApproveData {
-  deposit_token: any
+  depositTokenInfo: any
   seedstage_contract_address: any
   max_allocation_per_address: any
   setState: (state: boolean) => void
 }
 
 const ArppoveToken = ({
-  deposit_token,
+  depositTokenInfo,
   seedstage_contract_address,
   max_allocation_per_address,
   setState,
 }: IApproveData) => {
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
-      address: deposit_token.token_address,
+      address: depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'approve',
     })
@@ -64,7 +64,7 @@ const ArppoveToken = ({
 
   const APPROVE_AMOUNT = ethers.parseUnits(
     String(max_allocation_per_address),
-    deposit_token.decimal,
+    depositTokenInfo?.decimals,
   )
   return (
     <Button
@@ -192,13 +192,13 @@ export const DepositArea = ({
   const [depositable, set_depositale] = React.useState<boolean>(false)
   const checkAllownce = useCallback(async () => {
     const allowance = await readContract({
-      address: seedStages.deposit_token.token_address,
+      address: seedStages.depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'allowance',
       args: [account.address, seedStages?.seedstage_contract_address],
     })
 
-    const deposit_decimals = seedStages.deposit_token.decimal
+    const deposit_decimals = seedStages.depositTokenInfo?.decimals
     const formated = allowance
       ? ethers.formatUnits(allowance.toString(), deposit_decimals)
       : 0
@@ -219,7 +219,7 @@ export const DepositArea = ({
       args: [Number(index), account.address],
     })
     if (!data) return set_deposited_amount(0)
-    const deposit_decimals = seedStages.deposit_token.decimal
+    const deposit_decimals = seedStages.depositTokenInfo?.decimals
     const formated = ethers.formatUnits(data.toString(), deposit_decimals)
     if (Number(formated) > 0) {
       set_deposited_amount(Number(formated))
@@ -315,7 +315,7 @@ export const DepositArea = ({
     if (deposited_amount > 0) {
       return (
         <Button size={'custom'} className='uppercase' disabled={true}>
-          Deposited {deposited_amount} {seedStages?.deposit_token.name}
+          Deposited {deposited_amount} {seedStages?.project?.projectName}
         </Button>
       )
     }
@@ -344,15 +344,16 @@ export const DepositArea = ({
           round_list={round_list}
           current_round={current_round}
           merkle_proof={merkle_proof}
-          deposit_decimal={seedStages.deposit_token.decimal}
+          deposit_decimal={seedStages.depositTokenInfo?.decimals}
           min_allocation_amount={current_round?.min_allocation_per_address}
           max_allocation_amount={current_round?.max_allocation_per_address}
         />
       )
     }
+
     return (
       <ArppoveToken
-        deposit_token={seedStages.deposit_token}
+        depositTokenInfo={seedStages.depositTokenInfo}
         max_allocation_per_address={current_round.max_allocation_per_address}
         seedstage_contract_address={seedStages.seedstage_contract_address}
         setState={set_depositale}
@@ -370,22 +371,22 @@ export const DepositArea = ({
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Deposit token:</p>
               <p className='text-white line-clamp-1'>
-                {seedStages?.deposit_token.name} (
-                {seedStages?.deposit_token.token_address})
+                {seedStages?.project?.projectName} 
+                ({seedStages?.depositTokenInfo?.tokenAddress})
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Min allocation:</p>
               <p className='text-white line-clamp-1'>
                 {current_round?.min_allocation_per_address}{' '}
-                {seedStages?.deposit_token.name}
+                {seedStages?.project?.projectName}
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Max allocation:</p>
               <p className='text-white line-clamp-1'>
                 {current_round?.max_allocation_per_address}{' '}
-                {seedStages?.deposit_token.name}
+                {seedStages?.project?.projectName}
               </p>
             </div>
           </div>

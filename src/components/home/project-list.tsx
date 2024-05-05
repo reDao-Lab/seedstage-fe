@@ -62,15 +62,15 @@ export const ProjectList = ({ data, icon, listName }: any) => {
             return (
               <SwiperSlide key={item.id} className='!w-[295px]'>
                 <ProjectItem
-                  id={item.id}
-                  name={item.project_information.name}
-                  short_description={item.short_description}
+                  id={item.projectId}
+                  name={item.projectName}
+                  short_description={item.shortDescription}
                   chain='Arbitrum'
-                  cover_image={item.cover_image}
+                  cover_image={item.banner}
                   logo={item.logo}
-                  total_raise={item.total_raise}
-                  slug={item.slug}
-                  status={item.status}
+                  total_raise={0}
+                  slug={""}
+                  status={""}
                   deposit_token={item.deposit_token}
                   chain_network={item?.deposit_token?.chain_network}
                   is_premium={true}

@@ -20,7 +20,7 @@ interface IMainArea {
   token_network: string
   total_raise: number
   round_data: any
-  round_list: any
+  round_list: [] | any
   project_logo?: string
   telegram_link: string
   website_link: string
@@ -75,15 +75,18 @@ export const MainArea = ({
     seconds: 0,
   })
   const [currentRound, setCurrentRound] = useState({
-    round_type: '',
-    name: '',
-    id: '',
-    allocation: 0,
-    min_allocation_per_address: 0,
-    max_allocation_per_address: 0,
-    end_time: '',
-    start_time: '',
-    seedstage_id: '',
+    seedStageAddress: "0x629eb1db89c4709a9605fef86b09ec88f64540ad",
+    roundId: "1",
+    isWhitelistRound: true,
+    minAllocationPerAddress: "10000",
+    maxAllocationPerAddress: "10000000000000000000",
+    startTime: "2024-05-04T07:48:38.000Z",
+    endTime: "2024-05-15T21:35:18.000Z",
+    raisedAmount: "0",
+    createdAt: "2024-05-04T07:49:36.801Z",
+    updatedAt: "2024-05-04T07:51:31.094Z",
+    name: "seed 4 round 4",
+    id: "6635e890e93a325a96f477c9"
   })
 
   const trueUTC = useCallback((_: string) => {
@@ -91,13 +94,13 @@ export const MainArea = ({
   }, [])
 
   const findCurrentRound = useCallback(() => {
-    if (!round_data?.start_time || !round_data?.end_time) return setCurrentRound(round_list[0])
+    if (!round_data?.startTime || !round_data?.endTime) return setCurrentRound(round_list[0])
 
     const now = new Date()
     let check = false
     for (let round of round_list) {
-      const startTime = new Date(trueUTC(round?.start_time))
-      const endTime = new Date(trueUTC(round?.end_time))
+      const startTime = new Date(trueUTC(round?.startTime))
+      const endTime = new Date(trueUTC(round?.endTime))
 
       const isInTimeRange = now >= startTime && now <= endTime
       if (isInTimeRange) {
@@ -109,7 +112,7 @@ export const MainArea = ({
     }
 
     if (!check) setCurrentRound(round_list[0])
-  }, [round_data?.end_time, round_data?.start_time, round_list, trueUTC])
+  }, [round_data?.end, round_data?.startTime, round_list, trueUTC])
 
   const calculateTimeLeft = useCallback(() => {
     let timeLeft = {
@@ -119,9 +122,9 @@ export const MainArea = ({
       seconds: 0,
     }
 
-    if (!currentRound?.end_time) return timeLeft
+    if (!currentRound?.endTime) return timeLeft
 
-    const difference = +new Date(currentRound?.end_time) - +new Date()
+    const difference = +new Date(currentRound?.endTime) - +new Date()
     if (difference > 0) {
       timeLeft = {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -217,7 +220,6 @@ export const MainArea = ({
 
         <div className=''>
           <PhaseItem
-            key={currentRound.id}
             data={currentRound}
             isActive={true}
             switch_round={(currentRound: any) => {
@@ -244,13 +246,11 @@ const Identification = ({
   return (
     <div className='flex items-center'>
       {img ? (
-        <div className="rounded-lg w-[90px] h-[90px] bg-[#272727]">
-          <Image
-            src={`/assets/${img}`}
+        <div className="rounded-lg w-[90px] h-[90px] bg-[#272727] overflow-hidden">
+          <img
+            src={`${img}`}
             alt='pecland'
-            height={88}
             className='object-cover object-center w-full h-full'
-            width={88}
           />
         </div>
       ) : null}
@@ -266,7 +266,7 @@ const Identification = ({
               <a href={website_link} target='_blank'>
                 <Image
                   src={WebsiteIco}
-                  alt='Discord icon'
+                  alt='Website icon'
                   className='w-5 h-5'
                 />
               </a>
@@ -374,11 +374,13 @@ const PhaseItem = ({
 }) => {
   const containerClass = isActive ? 'border-[#CC2727]' : 'border-[#3B3B3B]'
   const textColor = isActive ? 'text-[#CC2727]' : 'text-[#E7E7E7]'
-  const roundText = `${data.name} Round`
+  const roundText = `${data?.name} Round`
   const finalMessage =
-    data.round_type === 'whitelist'
+    data?.roundType === 'whitelist'
       ? 'Whitelist winner required'
       : 'Everyone can deposit'
+
+  console.log(123, data)
 
   return (
     <div
@@ -387,10 +389,10 @@ const PhaseItem = ({
     >
       <p className={`text-[#fcfcfd] text-[32px] leading-[40px] font-bold ${textColor} mb-4`}>{roundText}</p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-        Start time: {new Date(data.start_time + 'Z').toLocaleString('vi-VN')}
+        Start time: {new Date(data?.startTime).toLocaleString('vi-VN')}
       </p>
       <p className='text-sm font-medium pt-1 pb-1.5 text-[#B3B3B3]'>
-        End time: {new Date(data.end_time + 'Z').toLocaleString('vi-VN')}
+        End time: {new Date(data?.endTime).toLocaleString('vi-VN')}
       </p>
       <p className='text-[#0DFE33] text-sm font-bold mt-5'>
         {finalMessage}
