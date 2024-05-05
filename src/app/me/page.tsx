@@ -3,8 +3,8 @@
 import { Breadcrumb } from '@/components/breadcrumb'
 import { Button } from '@/components/ui/button'
 
-import TeleIco from '@/images/tele-ico.svg'
-import XIco from '@/images/x-ico.svg'
+import TeleIco from '@/images/icons/tele.svg'
+import XIco from '@/images/icons/x.svg'
 import { shorten_address } from '@/lib/utils'
 import Image from 'next/image'
 import { useAccount } from 'wagmi'
