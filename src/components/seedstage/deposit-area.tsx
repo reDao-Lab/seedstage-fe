@@ -157,6 +157,15 @@ export const DepositArea = ({
   roundId,
   seedstage_status,
 }: IDepositArea) => {
+  console.log(
+    {
+      seedStages,
+      round_list,
+      roundId,
+      seedstage_status,
+    }
+  )
+
   const account = getAccount()
   const network = useNetwork()
   const { current_round_id } = roundStore()

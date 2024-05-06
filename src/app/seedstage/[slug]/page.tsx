@@ -91,13 +91,14 @@ export default async function IdoDetailPage({
   
   for (let _ of project_data) {
     let round:any = (await axiosClient.get("/externals/getRounds/" + _.seedStageAddress))
-    
     const is_current = is_current_round(round[0].start_time, round[0].end_time)
     if (is_current) {
       round_data = round[0]
     }
     round_list.push(round[0])
   }
+
+  console.log(round_list)
 
   return (
     <div className='relative'>

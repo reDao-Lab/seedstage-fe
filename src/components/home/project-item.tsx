@@ -76,7 +76,7 @@ export const ProjectItem = ({
             </div>
           </div>
           <div className='space-y-2'>
-            <Link href={`/seedstage/${slug}`} className='flex items-center'>
+            <Link href={`/seedstage/${id}`} className='flex items-center'>
               <h3 className='font-medium text-2xl text-primary line-clamp-1 uppercase leading-[19px]'>
                 {name}
               </h3>
@@ -111,7 +111,7 @@ export const ProjectItem = ({
               <div className='flex items-center'>
                 <img
                   src={`/assets/${deposit_token?.icon}`}
-                  alt='lt'
+                  alt=''
                   className='w-6 rounded mr-2'
                 />
                 <p className='text-[#e7e7e7] font-medium text-xs'>

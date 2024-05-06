@@ -380,7 +380,7 @@ const PhaseItem = ({
       ? 'Whitelist winner required'
       : 'Everyone can deposit'
 
-  console.log(123, data)
+  // console.log(123, data)
 
   return (
     <div

@@ -69,10 +69,10 @@ export const ProjectList = ({ data, icon, listName }: any) => {
                   cover_image={item.banner}
                   logo={item.logo}
                   total_raise={0}
-                  slug={""}
+                  slug={item.projectId}
                   status={""}
                   deposit_token={item.deposit_token}
-                  chain_network={item?.deposit_token?.chain_network}
+                  chain_network={item?.chain_network}
                   is_premium={true}
                 />
               </SwiperSlide>
