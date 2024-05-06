@@ -157,14 +157,6 @@ export const DepositArea = ({
   roundId,
   seedstage_status,
 }: IDepositArea) => {
-  console.log(
-    {
-      seedStages,
-      round_list,
-      roundId,
-      seedstage_status,
-    }
-  )
 
   const account = getAccount()
   const network = useNetwork()
@@ -180,7 +172,11 @@ export const DepositArea = ({
 
   React.useEffect(() => {
     const round = round_list.find((r: any) => r.id === current_round_id)
-    if (round) set_current_round(round)
+    if (round) set_current_round({
+      ...round,
+      min_allocation_per_address: round.minAllocationPerAddress,
+      max_allocation_per_address: round.maxAllocationPerAddress,
+    })
   }, [current_round_id, round_list])
 
   const proofQuery = useQuery(
@@ -201,10 +197,10 @@ export const DepositArea = ({
   const [depositable, set_depositale] = React.useState<boolean>(false)
   const checkAllownce = useCallback(async () => {
     const allowance = await readContract({
-      address: seedStages.depositTokenInfo?.tokenAddress,
+      address: seedStages[0].depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'allowance',
-      args: [account.address, seedStages?.seedstage_contract_address],
+      args: [account.address, seedStages[0]?.seedstage_contract_address],
     })
 
     const deposit_decimals = seedStages.depositTokenInfo?.decimals
@@ -380,22 +376,22 @@ export const DepositArea = ({
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Deposit token:</p>
               <p className='text-white line-clamp-1'>
-                {seedStages?.project?.projectName} 
-                ({seedStages?.depositTokenInfo?.tokenAddress})
+                {seedStages[0]?.depositTokenInfo?.name}{' '}
+                ({seedStages[0]?.depositTokenInfo?.tokenAddress})
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Min allocation:</p>
               <p className='text-white line-clamp-1'>
                 {current_round?.min_allocation_per_address}{' '}
-                {seedStages?.project?.projectName}
+                {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Max allocation:</p>
               <p className='text-white line-clamp-1'>
-                {current_round?.max_allocation_per_address}{' '}
-                {seedStages?.project?.projectName}
+                {current_round?.min_allocation_per_address}{' '}
+                {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>
           </div>

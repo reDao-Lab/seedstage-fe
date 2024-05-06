@@ -218,7 +218,7 @@ export const MainArea = ({
           </p>
         </div>
 
-        <div className=''>
+        {/* <div className=''>
           <PhaseItem
             data={currentRound}
             isActive={true}
@@ -227,6 +227,19 @@ export const MainArea = ({
               set_current_round_id(currentRound.id)
             }}
           />
+        </div> */}
+        <div className='overflow-visible xl:overflow-y-scroll overflow-x-hidden h-full xl:max-h-[300px] space-y-2 custom-scrollbar'>
+          {round_list?.map((round: any) => (
+            <PhaseItem
+              key={round.id}
+              data={round}
+              isActive={round.id === currentRound.id}
+              switch_round={(currentRound: any) => {
+                setCurrentRound(round)
+                set_current_round_id(round.roundId)
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
@@ -372,7 +385,7 @@ const PhaseItem = ({
   isActive: boolean
   switch_round: (currentRound: any) => void
 }) => {
-  const containerClass = isActive ? 'border-[#CC2727]' : 'border-[#3B3B3B]'
+  const containerClass = isActive ? 'border-[#0DFFE2]' : 'border-[#3B3B3B]'
   const textColor = isActive ? 'text-[#CC2727]' : 'text-[#E7E7E7]'
   const roundText = `${data?.name} Round`
   const finalMessage =
@@ -384,7 +397,7 @@ const PhaseItem = ({
 
   return (
     <div
-      className={`cursor-pointer`}
+    className={`border rounded-[8px] p-2 mr-1 cursor-pointer ${containerClass}`}
       onClick={() => switch_round(data)}
     >
       <p className={`text-[#fcfcfd] text-[32px] leading-[40px] font-bold ${textColor} mb-4`}>{roundText}</p>

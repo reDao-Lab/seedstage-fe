@@ -98,8 +98,6 @@ export default async function IdoDetailPage({
     round_list.push(round[0])
   }
 
-  console.log(round_list)
-
   return (
     <div className='relative'>
       <div className='home-bg relative z-[2] pb-[120px] pt-[107px]'>
