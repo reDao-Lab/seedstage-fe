@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Premium from '../premium'
 
 interface IProjectItem {
   id: any
@@ -12,6 +13,7 @@ interface IProjectItem {
   logo: string
   deposit_token: any
   chain_network: any
+  is_premium: boolean
 }
 
 export const ProjectItem = ({
@@ -26,91 +28,93 @@ export const ProjectItem = ({
   slug,
   deposit_token,
   chain_network,
+  is_premium,
 }: IProjectItem) => {
   const display_status =
     status === 'open' ? 'Opening' : status === 'upcoming' ? 'Upcoming' : 'Ended'
   const class_status =
     status === 'open'
-      ? 'bg-[#66cc27]'
+      ? 'bg-[#009117]'
       : status === 'upcoming'
-        ? 'bg-[#EA9A22]'
-        : 'bg-[#CC2727]'
+        ? 'bg-[#F06415]'
+        : 'bg-[#A2A2A2]'
 
   return (
-    <div className='max-w-[324px] max-h-[432px]' key={id}>
-      <div className='space-y-8 rounded-[8px] overflow-hidden bg-[#121212]'>
+    <div className='max-w-[295px] max-h-[547px]' key={id}>
+      <div className='space-y-6 overflow-hidden bg-transparent'>
         <span data-state='closed' className='relative'>
           <div className='relative z-[1] select-none'>
-            <Link href={`/seedstage/${slug}`}>
-              <div className='w-full h-full overflow-hidden'>
+            <Link href={`/seedstage/${id}`}>
+              <div className='w-full h-full overflow-hidden rounded-[12px]'>
                 <img
-                  src={`/assets/${cover_image}`}
-                  className='w-[324px] h-[108px] object-cover object-center transition-all hover:scale-105'
+                  src={cover_image}
+                  className='w-[324px] h-[200px] object-cover object-center transition-all hover:scale-105'
                 />
               </div>
             </Link>
-            <div className='w-[50px] h-[50px] absolute -bottom-[25px] left-3 bg-[#121212] rounded-[8px] p-0.5'>
+            <div className='w-20 h-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-0.5'>
               {logo && (
                 <img
-                  src={`/assets/${logo}`}
+                  src={logo}
                   alt='lt'
                   className='w-full aspect-square rounded'
                 />
               )}
             </div>
+
+            <div className="absolute top-3 right-3">
+              <Premium />
+            </div>
           </div>
-          <div className='absolute z-[2] flex items-center gap-1.5 top-3 right-3'>
+        </span>
+        <div className='pb-5'>
+          <div className='flex items-center gap-1.5 mb-4'>
             <div
-              className={`py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px] ${class_status}`}
+              className={`py-1.5 px-2 text-white font-medium text-xs rounded-[4px] ${class_status} uppercase`}
             >
               {display_status}
             </div>
-            {/* <div className='bg-white py-1.5 px-3 text-[#0a0a0a] font-medium text-sm rounded-[4px]'>
-              Public
-            </div> */}
           </div>
-        </span>
-        <div className='px-3 pb-5'>
           <div className='space-y-2'>
-            <Link href={`/seedstage/${slug}`} className='flex items-center'>
-              <h3 className='font-medium text-base text-[#e7e7e7] line-clamp-1 uppercase leading-[19px]'>
+            <Link href={`/seedstage/${id}`} className='flex items-center'>
+              <h3 className='font-medium text-2xl text-primary line-clamp-1 uppercase leading-[19px]'>
                 {name}
               </h3>
             </Link>
-            <p className='text-xs text-[#8e8e8e] line-clamp-3'>
+            <p className='text-base text-[#FCFCFD] line-clamp-3 leading-8'>
               {short_description}
             </p>
           </div>
-          <div className='mt-4 mb-4 bg-black rounded-[8px] flex w-full justify-between items-center text-[#e7e7e7] font-medium p-3'>
+          <div className='mt-4 mb-4 border border-primary rounded-[8px] flex w-full justify-between items-center text-[#e7e7e7] font-medium p-3'>
             <p className='text-sm'>Total Raise</p>
-            <p className=''>${total_raise}</p>
+            <p className='text-[#58BD7D]'>${total_raise}</p>
           </div>
 
-          <div className='border-t border-t-[#3b3b3b] pt-4 w-full flex justify-between items-start'>
-            <div className='space-y-1 text-left'>
-              <p className='text-[#8e8e8e] font-medium text-xs'>Raise Chain</p>
+          <div className='w-full flex justify-between items-start'>
+            <div className='space-y-3 text-left'>
+              <p className='text-[#FCFCFD] font-medium text-sm'>Raise Chain</p>
               <div className='flex items-center'>
                 <img
                   src={`/assets/${chain_network?.logo}`}
                   alt='lt'
-                  className='w-8 rounded-full mr-2'
+                  className='w-6 rounded-full mr-2'
                 />
-                <p className='text-[#e7e7e7] font-medium text-sm'>
+                <p className='text-[#e7e7e7] font-medium text-xs'>
                   {chain_network?.name}
                 </p>
               </div>
             </div>
-            <div className='space-y-1 text-right'>
-              <p className='text-[#8e8e8e] font-medium text-xs'>
+            <div className='space-y-3 text-right'>
+              <p className='text-[#FCFCFD] font-medium text-sm'>
                 Deposit token
               </p>
               <div className='flex items-center'>
                 <img
                   src={`/assets/${deposit_token?.icon}`}
-                  alt='lt'
-                  className='w-8 rounded mr-2'
+                  alt=''
+                  className='w-6 rounded mr-2'
                 />
-                <p className='text-[#e7e7e7] font-medium text-sm'>
+                <p className='text-[#e7e7e7] font-medium text-xs'>
                   {deposit_token.name}
                 </p>
               </div>

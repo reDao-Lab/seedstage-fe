@@ -4,17 +4,15 @@ import * as React from 'react'
 import payableToken from '@/abis/payableToken.json'
 import poolSaleReDAO from '@/abis/poolSaleReDAO.json'
 import roundStore from '@/store/roundStore'
-import { getAccount } from '@wagmi/core'
-import { useNetwork } from 'wagmi'
+import { getAccount, readContract } from '@wagmi/core'
 import { ethers } from 'ethers'
+import { useCallback } from 'react'
 import { toast } from 'sonner'
-import { useContractRead, useContractWrite, useQuery } from 'wagmi'
-import { readContract } from '@wagmi/core'
+import { useContractWrite, useNetwork, useQuery } from 'wagmi'
 import { ConnectWalletAction } from '../connect-wallet-action'
 import { DepositDialog } from '../dialogs/deposit'
 import { Button } from '../ui/button'
 import { Progress } from '../ui/progress'
-import { useCallback } from 'react'
 interface IDepositArea {
   roundId: string
   seedStages: any
@@ -33,21 +31,21 @@ interface IDepositData {
 }
 
 interface IApproveData {
-  deposit_token: any
+  depositTokenInfo: any
   seedstage_contract_address: any
   max_allocation_per_address: any
   setState: (state: boolean) => void
 }
 
 const ArppoveToken = ({
-  deposit_token,
+  depositTokenInfo,
   seedstage_contract_address,
   max_allocation_per_address,
   setState,
 }: IApproveData) => {
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
-      address: deposit_token.token_address,
+      address: depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'approve',
     })
@@ -66,7 +64,7 @@ const ArppoveToken = ({
 
   const APPROVE_AMOUNT = ethers.parseUnits(
     String(max_allocation_per_address),
-    deposit_token.decimal,
+    depositTokenInfo?.decimals,
   )
   return (
     <Button
@@ -159,6 +157,7 @@ export const DepositArea = ({
   roundId,
   seedstage_status,
 }: IDepositArea) => {
+
   const account = getAccount()
   const network = useNetwork()
   const { current_round_id } = roundStore()
@@ -173,7 +172,11 @@ export const DepositArea = ({
 
   React.useEffect(() => {
     const round = round_list.find((r: any) => r.id === current_round_id)
-    if (round) set_current_round(round)
+    if (round) set_current_round({
+      ...round,
+      min_allocation_per_address: round.minAllocationPerAddress,
+      max_allocation_per_address: round.maxAllocationPerAddress,
+    })
   }, [current_round_id, round_list])
 
   const proofQuery = useQuery(
@@ -194,13 +197,13 @@ export const DepositArea = ({
   const [depositable, set_depositale] = React.useState<boolean>(false)
   const checkAllownce = useCallback(async () => {
     const allowance = await readContract({
-      address: seedStages.deposit_token.token_address,
+      address: seedStages[0].depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'allowance',
-      args: [account.address, seedStages?.seedstage_contract_address],
+      args: [account.address, seedStages[0]?.seedstage_contract_address],
     })
 
-    const deposit_decimals = seedStages.deposit_token.decimal
+    const deposit_decimals = seedStages.depositTokenInfo?.decimals
     const formated = allowance
       ? ethers.formatUnits(allowance.toString(), deposit_decimals)
       : 0
@@ -221,7 +224,7 @@ export const DepositArea = ({
       args: [Number(index), account.address],
     })
     if (!data) return set_deposited_amount(0)
-    const deposit_decimals = seedStages.deposit_token.decimal
+    const deposit_decimals = seedStages.depositTokenInfo?.decimals
     const formated = ethers.formatUnits(data.toString(), deposit_decimals)
     if (Number(formated) > 0) {
       set_deposited_amount(Number(formated))
@@ -317,7 +320,7 @@ export const DepositArea = ({
     if (deposited_amount > 0) {
       return (
         <Button size={'custom'} className='uppercase' disabled={true}>
-          Deposited {deposited_amount} {seedStages?.deposit_token.name}
+          Deposited {deposited_amount} {seedStages?.project?.projectName}
         </Button>
       )
     }
@@ -346,15 +349,16 @@ export const DepositArea = ({
           round_list={round_list}
           current_round={current_round}
           merkle_proof={merkle_proof}
-          deposit_decimal={seedStages.deposit_token.decimal}
+          deposit_decimal={seedStages.depositTokenInfo?.decimals}
           min_allocation_amount={current_round?.min_allocation_per_address}
           max_allocation_amount={current_round?.max_allocation_per_address}
         />
       )
     }
+
     return (
       <ArppoveToken
-        deposit_token={seedStages.deposit_token}
+        depositTokenInfo={seedStages.depositTokenInfo}
         max_allocation_per_address={current_round.max_allocation_per_address}
         seedstage_contract_address={seedStages.seedstage_contract_address}
         setState={set_depositale}
@@ -363,37 +367,41 @@ export const DepositArea = ({
   }
 
   return (
-    <div className='ido-box flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6'>
-      <div className='space-y-3'>
-        <h2 className='text-xl text-[#e7e7e7] uppercase'>Deposit</h2>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Deposit token:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {seedStages?.deposit_token.name} (
-            {seedStages?.deposit_token.token_address})
-          </p>
-        </div>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Min allocation:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {current_round?.min_allocation_per_address}{' '}
-            {seedStages?.deposit_token.name}
-          </p>
-        </div>
-        <div className='flex flex-col lg:flex-row w-full gap-3'>
-          <p className='text-[#b3b3b3] text-base'>Max allocation:</p>
-          <p className='text-[#cc2727] line-clamp-1'>
-            {current_round?.max_allocation_per_address}{' '}
-            {seedStages?.deposit_token.name}
-          </p>
-        </div>
+    <div className="ido-box">
+      <h2 className='text-[32px] leading-[40px] font-bold text-white uppercase pb-6 border-b border-[#3B3B3B]'>Deposit</h2>
 
-        <div className='flex w-full justify-between items-center'>
-          <Progress value={progressPercent} className='w-[90%]' />
-          <div className='flex font-bold'>{progressPercent} %</div>
+      <div className='flex w-full lg:items-center flex-col lg:flex-row justify-between gap-6 pt-6'>
+        <div className=''>
+          <div className="space-y-3">
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Deposit token:</p>
+              <p className='text-white line-clamp-1'>
+                {seedStages[0]?.depositTokenInfo?.name}{' '}
+                ({seedStages[0]?.depositTokenInfo?.tokenAddress})
+              </p>
+            </div>
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Min allocation:</p>
+              <p className='text-white line-clamp-1'>
+                {current_round?.min_allocation_per_address}{' '}
+                {seedStages[0]?.depositTokenInfo?.name}
+              </p>
+            </div>
+            <div className='flex flex-col lg:flex-row w-full gap-3'>
+              <p className='text-[#777E90] text-base'>Max allocation:</p>
+              <p className='text-white line-clamp-1'>
+                {current_round?.min_allocation_per_address}{' '}
+                {seedStages[0]?.depositTokenInfo?.name}
+              </p>
+            </div>
+          </div>
         </div>
+        {renderActionButton()}
       </div>
-      {renderActionButton()}
+      <div className='flex w-full justify-between items-center mt-6'>
+        <Progress value={progressPercent} className='w-[95%] bg-[#888888]' />
+        <div className='flex font-bold'>{progressPercent} %</div>
+      </div>
     </div>
   )
 }

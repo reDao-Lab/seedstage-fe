@@ -1,9 +1,7 @@
 export const VestingSchedule = () => {
   return (
     <div className='ido-box space-y-6'>
-      <h2 className='text-xl font-medium text-[#e7e7e7] uppercase'>
-        Profit Distribution History
-      </h2>
+      <h2 className='text-[32px] leading-[40px] font-bold text-white uppercase pb-6 border-b border-[#3B3B3B]'>Profit Distribution History</h2>
 
       <div className='overflow-hidden'>
         <table className='table-auto xl:w-full space-y-1 border-separate border-spacing-y-1 w-full overflow-x-scroll'>

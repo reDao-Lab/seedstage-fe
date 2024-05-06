@@ -1,10 +1,8 @@
+import axiosClient from '@/app/api/axiosClient'
 import { Breadcrumb } from '@/components/breadcrumb'
 import { DepositArea } from '@/components/seedstage/deposit-area'
 import { MainArea } from '@/components/seedstage/main-area'
 import { VestingSchedule } from '@/components/seedstage/vesting-schedule'
-import { public_directus } from '@/lib/directus'
-import { readItems } from '@directus/sdk'
-import { Metadata, ResolvingMetadata } from 'next'
 
 export const tags = ['all']
 export const fetchCache = 'force-no-store'
@@ -63,38 +61,36 @@ export default async function IdoDetailPage({
 }: {
   params: { slug: string }
 }) {
-  const seedStages = await public_directus.request(
-    readItems('seedstages', {
-      filter: {
-        status: {
-          _in: ['open', 'upcoming', 'completed'],
-        },
-      },
-      fields: [
-        '*',
-        'iou_token.token_address',
-        'iou_token.symbol',
-        'deposit_token.*',
-        'project_information.*',
-      ],
-    }),
-  )
+  // const seedStages = await public_directus.request(
+  //   readItems('seedstages', {
+  //     filter: {
+  //       status: {
+  //         _in: ['open', 'upcoming', 'completed'],
+  //       },
+  //     },
+  //     fields: [
+  //       '*',
+  //       'iou_token.token_address',
+  //       'iou_token.symbol',
+  //       'deposit_token.*',
+  //       'project_information.*',
+  //     ],
+  //   }),
+  // )
 
-  const project_data = seedStages.find((s: any) => {
-    return s.project_information.slug === params.slug
-  })
+  // console.log(21, params);
 
+  // const project_data = seedStages.find((s: any) => {
+  //   return s.project_information.slug === params.slug
+  // })
+
+  const project_data = (await axiosClient.get("/externals/seedStagesByProjectId?projectId=" + params.slug)).data
+  
   let round_list = []
   let round_data: any
-
-  for (let round_id of project_data?.rounds) {
-    const round = await public_directus.request(
-      readItems('seedstage_rounds', {
-        filter: {
-          id: round_id,
-        },
-      }),
-    )
+  
+  for (let _ of project_data) {
+    let round:any = (await axiosClient.get("/externals/getRounds/" + _.seedStageAddress))
     const is_current = is_current_round(round[0].start_time, round[0].end_time)
     if (is_current) {
       round_data = round[0]
@@ -104,7 +100,7 @@ export default async function IdoDetailPage({
 
   return (
     <div className='relative'>
-      <div className='home-bg relative z-[2] pb-[120px]'>
+      <div className='home-bg relative z-[2] pb-[120px] pt-[107px]'>
         <div className='space-y-20 block mx-auto max-w-[1280px]'>
           <section>
             <div className='px-3 xl:px-0'>
@@ -117,11 +113,11 @@ export default async function IdoDetailPage({
             </div>
             {/* <div className="text-2xl font-bold">{project.name}</div> */}
 
-            <div className='mt-3 space-y-3 px-3 xl:px-0'>
+            <div className='mt-3 space-y-8 px-3 xl:px-0'>
               <MainArea
-                name={project_data?.project_information.name}
-                iouSymbol={project_data?.iou_token.symbol}
-                iouTokenAddress={project_data?.iou_token.token_address}
+                name={project_data[0]?.project?.projectName}
+                iouSymbol={project_data[0]?.iouTokenInfo?.symbol}
+                iouTokenAddress={project_data[0]?.iouTokenInfo?.tokenAddress}
                 vesting={'25% TGE, 1month cliff, linear vest over 4 months'}
                 idoPrice={0.0}
                 ido_network={'Arbitrum'}
@@ -129,39 +125,62 @@ export default async function IdoDetailPage({
                 total_raise={project_data?.total_raise}
                 round_data={round_data}
                 round_list={[...round_list]}
-                project_logo={project_data?.project_information?.logo}
-                telegram_link={project_data?.project_information?.telegram_link}
-                website_link={project_data?.project_information?.website_link}
-                x_link={project_data?.project_information?.x_link}
-                discord_link={project_data?.project_information?.discord_link}
+                project_logo={project_data[0]?.project?.logo}
+                telegram_link={project_data[0]?.project?.telegram}
+                website_link={project_data[0]?.project?.website}
+                x_link={project_data[0]?.project?.twitter}
+                discord_link={project_data[0]?.project?.discord}
                 seedstage_status={project_data?.status}
               />
               <DepositArea
                 seedStages={project_data}
-                roundId={project_data?.rounds[0]}
+                roundId={""}
                 round_list={[...round_list]}
                 seedstage_status={project_data?.status}
               />
             </div>
 
-            <div className='mt-3 px-3 xl:px-0'>
+            <div className='ido-box mt-8'>
+              <h2 className='text-[32px] leading-[40px] font-bold text-white uppercase pb-6 border-b border-[#3B3B3B] mb-6'>Description</h2>
+
               <div
-                className='ido-box prose !prose-invert max-w-none'
+                className='prose !prose-invert max-w-none'
                 dangerouslySetInnerHTML={{
-                  __html: project_data.project_information.content,
+                  __html: "<content-missing>"
+                }}
+              ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Backers/Investors/Partners</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: "<backers_investors_partners-missing>",
+                }}
+              ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>Team</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: "<team-missing>"
+                }}
+              ></div>
+              <h2 className='text-[24px] leading-[32px] font-bold text-white uppercase pb-3 mt-6'>TOkenomics</h2>
+              <div
+                className='prose !prose-invert max-w-none'
+                dangerouslySetInnerHTML={{
+                  __html: "<tokenomics-missing>"
                 }}
               ></div>
             </div>
 
-            <div className='mt-3 px-3 xl:px-0'>
+            <div className='mt-8 px-3 xl:px-0'>
               <VestingSchedule />
             </div>
           </section>
         </div>
       </div>
       <div className='absolute z-[1] w-full h-full top-0 left-0 overflow-hidden'>
-        <div className='w-[744px] aspect-square rounded-full bg-[#cc2727] absolute -left-[500px] top-[100px]'></div>
-        <div className='w-[744px] aspect-square rounded-full bg-[#cc2727] absolute right-[20px] -bottom-[400px]'></div>
+        <div className='w-[744px] aspect-square rounded-full bg-primary absolute -left-[500px] top-[100px]'></div>
+        <div className='w-[744px] aspect-square rounded-full bg-primary absolute right-[20px] -bottom-[400px]'></div>
       </div>
     </div>
   )
