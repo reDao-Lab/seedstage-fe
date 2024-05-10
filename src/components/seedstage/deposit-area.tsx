@@ -33,14 +33,14 @@ interface IDepositData {
 interface IApproveData {
   depositTokenInfo: any
   seedstage_contract_address: any
-  max_allocation_per_address: any
+  maxAllocationPerAddress: any
   setState: (state: boolean) => void
 }
 
 const ArppoveToken = ({
   depositTokenInfo,
   seedstage_contract_address,
-  max_allocation_per_address,
+  maxAllocationPerAddress,
   setState,
 }: IApproveData) => {
   const { data, isLoading, isSuccess, isError, error, write } =
@@ -63,8 +63,8 @@ const ArppoveToken = ({
   }, [isSuccess, isError, setState, error?.message])
 
   const APPROVE_AMOUNT = ethers.parseUnits(
-    String(max_allocation_per_address),
-    depositTokenInfo?.decimals,
+    String(maxAllocationPerAddress),
+    Number(depositTokenInfo?.decimals),
   )
   return (
     <Button
@@ -164,19 +164,16 @@ export const DepositArea = ({
   const [current_round, set_current_round] = React.useState({
     start_time: '',
     end_time: '',
-    min_allocation_per_address: 0,
-    max_allocation_per_address: 0,
+    minAllocationPerAddress: 0,
+    maxAllocationPerAddress: 0,
   })
 
   const [progressPercent, setProgressPercent] = React.useState(0)
 
   React.useEffect(() => {
-    const round = round_list.find((r: any) => r.id === current_round_id)
-    if (round) set_current_round({
-      ...round,
-      min_allocation_per_address: round.minAllocationPerAddress,
-      max_allocation_per_address: round.maxAllocationPerAddress,
-    })
+    console.log('current_round_id', current_round_id)
+    const round = round_list.find((r: any) => r.roundId === current_round_id)
+    if (round) set_current_round({...round})
   }, [current_round_id, round_list])
 
   const proofQuery = useQuery(
@@ -196,6 +193,7 @@ export const DepositArea = ({
   const [deposited_amount, set_deposited_amount] = React.useState<any>(0)
   const [depositable, set_depositale] = React.useState<boolean>(false)
   const checkAllownce = useCallback(async () => {
+    if (!seedStages[0].depositTokenInfo?.tokenAddress) return
     const allowance = await readContract({
       address: seedStages[0].depositTokenInfo?.tokenAddress,
       abi: payableToken,
@@ -207,7 +205,7 @@ export const DepositArea = ({
     const formated = allowance
       ? ethers.formatUnits(allowance.toString(), deposit_decimals)
       : 0
-    if (Number(formated) >= current_round.min_allocation_per_address) {
+    if (Number(formated) >= current_round.minAllocationPerAddress) {
       set_depositale(true)
     } else {
       set_depositale(false)
@@ -307,13 +305,6 @@ export const DepositArea = ({
         </Button>
       )
     }
-    if (round_list.indexOf(current_round) < 0) {
-      return (
-        <Button size={'custom'} className='uppercase' disabled={true}>
-          Round Ended
-        </Button>
-      )
-    }
     if (!account.address || network?.chain?.id !== 42161) {
       return <ConnectWalletAction />
     }
@@ -345,22 +336,22 @@ export const DepositArea = ({
     if (depositable) {
       return (
         <Deposit
-          seedstage_contract_address={seedStages.seedstage_contract_address}
+          seedstage_contract_address={seedStages[0].seedStageAddress}
           round_list={round_list}
           current_round={current_round}
           merkle_proof={merkle_proof}
-          deposit_decimal={seedStages.depositTokenInfo?.decimals}
-          min_allocation_amount={current_round?.min_allocation_per_address}
-          max_allocation_amount={current_round?.max_allocation_per_address}
+          deposit_decimal={seedStages[0].depositTokenInfo?.decimals}
+          min_allocation_amount={current_round?.minAllocationPerAddress}
+          max_allocation_amount={current_round?.maxAllocationPerAddress}
         />
       )
     }
 
     return (
       <ArppoveToken
-        depositTokenInfo={seedStages.depositTokenInfo}
-        max_allocation_per_address={current_round.max_allocation_per_address}
-        seedstage_contract_address={seedStages.seedstage_contract_address}
+        depositTokenInfo={seedStages[0].depositTokenInfo}
+        maxAllocationPerAddress={current_round?.maxAllocationPerAddress}
+        seedstage_contract_address={seedStages[0].seedStageAddress}
         setState={set_depositale}
       />
     )
@@ -383,14 +374,14 @@ export const DepositArea = ({
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Min allocation:</p>
               <p className='text-white line-clamp-1'>
-                {current_round?.min_allocation_per_address}{' '}
+                {current_round?.minAllocationPerAddress}{' '}
                 {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Max allocation:</p>
               <p className='text-white line-clamp-1'>
-                {current_round?.min_allocation_per_address}{' '}
+                {current_round?.minAllocationPerAddress}{' '}
                 {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>

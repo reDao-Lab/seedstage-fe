@@ -46,7 +46,7 @@ interface IValuesInfo {
   iouTokenAddress: string
   ido_network: string
   token_network: string
-  total_raise: number
+  total_raise: string
 }
 
 export const MainArea = ({
@@ -67,7 +67,7 @@ export const MainArea = ({
   discord_link,
   seedstage_status,
 }: IMainArea) => {
-  const { current_round_id, set_current_round_id } = roundStore()
+  const { set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -94,7 +94,11 @@ export const MainArea = ({
   }, [])
 
   const findCurrentRound = useCallback(() => {
-    if (!round_data?.startTime || !round_data?.endTime) return setCurrentRound(round_list[0])
+    if (!round_data?.startTime || !round_data?.endTime) {
+      setCurrentRound(round_list[0])
+      set_current_round_id(round_list[0].roundId)
+      return 
+    }
 
     const now = new Date()
     let check = false
@@ -105,7 +109,7 @@ export const MainArea = ({
       const isInTimeRange = now >= startTime && now <= endTime
       if (isInTimeRange) {
         setCurrentRound(round)
-        set_current_round_id(round.id)
+        set_current_round_id(round.roundId)
         check = true
         break
       }
@@ -172,7 +176,7 @@ export const MainArea = ({
             iouTokenAddress={iouTokenAddress}
             ido_network={ido_network}
             token_network={token_network}
-            total_raise={total_raise}
+            total_raise={currentRound.raisedAmount}
           />
           {/* <VestingInfo vesting={vesting} /> */}
 
@@ -387,9 +391,9 @@ const PhaseItem = ({
 }) => {
   const containerClass = isActive ? 'border-[#0DFFE2]' : 'border-[#3B3B3B]'
   const textColor = isActive ? 'text-[#CC2727]' : 'text-[#E7E7E7]'
-  const roundText = `${data?.name} Round`
+  const roundText = data?.isWhitelistRound ? 'Whitelist Round' : 'Public Round' //`${data?.name} Round`
   const finalMessage =
-    data?.roundType === 'whitelist'
+    data?.isWhitelistRound
       ? 'Whitelist winner required'
       : 'Everyone can deposit'
 

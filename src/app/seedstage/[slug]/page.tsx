@@ -49,8 +49,8 @@ export const metadata = {
 
 const is_current_round = (start_time: any, end_time: any) => {
   if (
-    new Date(start_time + 'Z') <= new Date() &&
-    new Date(end_time + 'Z') >= new Date()
+    new Date(start_time) <= new Date() &&
+    new Date(end_time) >= new Date()
   )
     return true
   return false
@@ -86,16 +86,14 @@ export default async function IdoDetailPage({
 
   const project_data = (await axiosClient.get("/externals/seedStagesByProjectId?projectId=" + params.slug)).data
   
-  let round_list = []
   let round_data: any
-  
-  for (let _ of project_data) {
-    let round:any = (await axiosClient.get("/externals/getRounds/" + _.seedStageAddress))
-    const is_current = is_current_round(round[0].start_time, round[0].end_time)
+
+  const round_list:any = (await axiosClient.get("/externals/getRounds/" + project_data[0].seedStageAddress))
+  for (let round of round_list) {
+    const is_current = is_current_round(round.startTime, round.endTime)
     if (is_current) {
-      round_data = round[0]
+      round_data = round
     }
-    round_list.push(round[0])
   }
 
   return (
