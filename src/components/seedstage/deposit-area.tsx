@@ -171,7 +171,6 @@ export const DepositArea = ({
   const [progressPercent, setProgressPercent] = React.useState(0)
 
   React.useEffect(() => {
-    console.log('current_round_id', current_round_id)
     const round = round_list.find((r: any) => r.roundId === current_round_id)
     if (round) set_current_round({...round})
   }, [current_round_id, round_list])

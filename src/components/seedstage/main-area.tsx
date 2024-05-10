@@ -115,7 +115,10 @@ export const MainArea = ({
       }
     }
 
-    if (!check) setCurrentRound(round_list[0])
+    if (!check) {
+      setCurrentRound(round_list[0])
+      set_current_round_id(round_list[0].roundId)
+    }
   }, [round_data?.end, round_data?.startTime, round_list, trueUTC])
 
   const calculateTimeLeft = useCallback(() => {
