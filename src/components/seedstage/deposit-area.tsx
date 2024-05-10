@@ -336,8 +336,8 @@ export const DepositArea = ({
           current_round={current_round}
           merkle_proof={merkle_proof}
           deposit_decimal={seedStages[0].depositTokenInfo?.decimals}
-          min_allocation_amount={current_round?.minAllocationPerAddress}
-          max_allocation_amount={current_round?.maxAllocationPerAddress}
+          min_allocation_amount={ethers.formatUnits(current_round?.minAllocationPerAddress, Number(seedStages[0]?.depositTokenInfo?.decimals))}
+          max_allocation_amount={ethers.formatUnits(current_round?.maxAllocationPerAddress, Number(seedStages[0]?.depositTokenInfo?.decimals))}
         />
       )
     }
@@ -345,7 +345,7 @@ export const DepositArea = ({
     return (
       <ArppoveToken
         depositTokenInfo={seedStages[0].depositTokenInfo}
-        maxAllocationPerAddress={current_round?.maxAllocationPerAddress}
+        maxAllocationPerAddress={ethers.formatUnits(current_round?.maxAllocationPerAddress, Number(seedStages[0]?.depositTokenInfo?.decimals))}
         seedStageAddress={seedStages[0].seedStageAddress}
         setState={set_depositale}
       />
@@ -369,14 +369,14 @@ export const DepositArea = ({
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Min allocation:</p>
               <p className='text-white line-clamp-1'>
-                {current_round?.minAllocationPerAddress}{' '}
+                {ethers.formatUnits(current_round?.minAllocationPerAddress, Number(seedStages[0]?.depositTokenInfo?.decimals))}{' '}
                 {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>
             <div className='flex flex-col lg:flex-row w-full gap-3'>
               <p className='text-[#777E90] text-base'>Max allocation:</p>
               <p className='text-white line-clamp-1'>
-                {current_round?.minAllocationPerAddress}{' '}
+                {ethers.formatUnits(current_round?.maxAllocationPerAddress, Number(seedStages[0]?.depositTokenInfo?.decimals))}{' '}
                 {seedStages[0]?.depositTokenInfo?.name}
               </p>
             </div>
