@@ -22,7 +22,7 @@ interface IDepositArea {
 
 interface IDepositData {
   merkle_proof: any
-  seedstage_contract_address: any
+  seedStageAddress: any
   round_list: any
   current_round: any
   deposit_decimal: any
@@ -32,14 +32,14 @@ interface IDepositData {
 
 interface IApproveData {
   depositTokenInfo: any
-  seedstage_contract_address: any
+  seedStageAddress: any
   maxAllocationPerAddress: any
   setState: (state: boolean) => void
 }
 
 const ArppoveToken = ({
   depositTokenInfo,
-  seedstage_contract_address,
+  seedStageAddress,
   maxAllocationPerAddress,
   setState,
 }: IApproveData) => {
@@ -71,7 +71,7 @@ const ArppoveToken = ({
       size={'custom'}
       onClick={() =>
         write({
-          args: [seedstage_contract_address, APPROVE_AMOUNT],
+          args: [seedStageAddress, APPROVE_AMOUNT],
         })
       }
       className='uppercase'
@@ -84,7 +84,7 @@ const ArppoveToken = ({
 
 const Deposit = ({
   merkle_proof,
-  seedstage_contract_address,
+  seedStageAddress,
   round_list,
   current_round,
   deposit_decimal,
@@ -96,7 +96,7 @@ const Deposit = ({
 
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
-      address: seedstage_contract_address,
+      address: seedStageAddress,
       abi: poolSaleReDAO,
       functionName: 'deposit',
     })
@@ -197,7 +197,7 @@ export const DepositArea = ({
       address: seedStages[0].depositTokenInfo?.tokenAddress,
       abi: payableToken,
       functionName: 'allowance',
-      args: [account.address, seedStages[0]?.seedstage_contract_address],
+      args: [account.address, seedStages[0]?.seedStageAddress],
     })
 
     const deposit_decimals = seedStages.depositTokenInfo?.decimals
@@ -215,7 +215,7 @@ export const DepositArea = ({
     const index = round_list.indexOf(current_round)
     if (index < 0) return
     const data = await readContract({
-      address: seedStages?.seedstage_contract_address,
+      address: seedStages?.seedStageAddress,
       abi: poolSaleReDAO,
       functionName: 'userDeposits',
       args: [Number(index), account.address],
@@ -232,7 +232,7 @@ export const DepositArea = ({
     const index = round_list.indexOf(current_round)
     if (index < 0) return
     const data = await readContract({
-      address: seedStages?.seedstage_contract_address,
+      address: seedStages?.seedStageAddress,
       abi: poolSaleReDAO,
       functionName: 'rounds',
       args: [Number(index)],
@@ -335,7 +335,7 @@ export const DepositArea = ({
     if (depositable) {
       return (
         <Deposit
-          seedstage_contract_address={seedStages[0].seedStageAddress}
+          seedStageAddress={seedStages[0].seedStageAddress}
           round_list={round_list}
           current_round={current_round}
           merkle_proof={merkle_proof}
@@ -350,7 +350,7 @@ export const DepositArea = ({
       <ArppoveToken
         depositTokenInfo={seedStages[0].depositTokenInfo}
         maxAllocationPerAddress={current_round?.maxAllocationPerAddress}
-        seedstage_contract_address={seedStages[0].seedStageAddress}
+        seedStageAddress={seedStages[0].seedStageAddress}
         setState={set_depositale}
       />
     )
