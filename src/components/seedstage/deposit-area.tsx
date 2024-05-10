@@ -92,7 +92,6 @@ const Deposit = ({
   max_allocation_amount,
 }: IDepositData) => {
   const [depositDialoOpen, setDepositDialogOpen] = React.useState(false)
-  const index = round_list.indexOf(current_round)
 
   const { data, isLoading, isSuccess, isError, error, write } =
     useContractWrite({
@@ -114,13 +113,10 @@ const Deposit = ({
     }
   }, [isSuccess, isError, error?.message])
 
-  const raw = merkle_proof
-  const merkleProof = raw?.split('\n')
-
   const onClickConfirm = (enterAmount: any) => {
-    const converted = ethers.parseUnits(enterAmount.toString(), deposit_decimal)
+    const converted = ethers.parseUnits(enterAmount.toString(), Number(deposit_decimal))
     write({
-      args: [index, converted, merkleProof],
+      args: [current_round.roundId, converted],
     })
   }
 

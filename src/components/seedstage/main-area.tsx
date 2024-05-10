@@ -27,6 +27,7 @@ interface IMainArea {
   x_link: string
   discord_link: string
   seedstage_status: string
+  deposit_token: any
 }
 
 interface IIdentification {
@@ -47,6 +48,7 @@ interface IValuesInfo {
   ido_network: string
   token_network: string
   total_raise: string
+  deposit_token_symbol: string
 }
 
 export const MainArea = ({
@@ -66,6 +68,7 @@ export const MainArea = ({
   x_link,
   discord_link,
   seedstage_status,
+  deposit_token
 }: IMainArea) => {
   const { set_current_round_id } = roundStore()
   const [timeLeft, setTimeLeft] = useState({
@@ -180,6 +183,7 @@ export const MainArea = ({
             ido_network={ido_network}
             token_network={token_network}
             total_raise={currentRound.raisedAmount}
+            deposit_token_symbol={deposit_token.symbol}
           />
           {/* <VestingInfo vesting={vesting} /> */}
 
@@ -334,6 +338,7 @@ const ValuesInfo = ({
   iouTokenAddress,
   token_network,
   total_raise,
+  deposit_token_symbol,
 }: IValuesInfo) => {
   return (
     <div>
@@ -347,7 +352,7 @@ const ValuesInfo = ({
         <div className='pl-3 col-span-1 space-y-1.5'>
           <p className='text-xs font-semibold text-[#777E90]'>Total Raise</p>
           <div className='flex items-center gap-2.5'>
-            <p className='text-[#fcfcfd] text-[24px] leading-8 font-semibold'>{total_raise}</p>
+            <p className='text-[#fcfcfd] text-[24px] leading-8 font-semibold'>{total_raise}{` `}{deposit_token_symbol}</p>
           </div>
         </div>
         <div className='pl-3 col-span-1 space-y-1.5'>

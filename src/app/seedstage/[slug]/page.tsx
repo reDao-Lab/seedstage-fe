@@ -85,7 +85,7 @@ export default async function IdoDetailPage({
   // })
 
   const project_data = (await axiosClient.get("/externals/seedStagesByProjectId?projectId=" + params.slug)).data
-  
+
   let round_data: any
 
   const round_list:any = (await axiosClient.get("/externals/getRounds/" + project_data[0].seedStageAddress))
@@ -129,6 +129,7 @@ export default async function IdoDetailPage({
                 x_link={project_data[0]?.project?.twitter}
                 discord_link={project_data[0]?.project?.discord}
                 seedstage_status={project_data?.status}
+                deposit_token={project_data[0].depositTokenInfo}
               />
               <DepositArea
                 seedStages={project_data}
