@@ -158,6 +158,7 @@ export const DepositArea = ({
   const network = useNetwork()
   const { current_round_id } = roundStore()
   const [current_round, set_current_round] = React.useState({
+    roundId: 0,
     start_time: '',
     end_time: '',
     minAllocationPerAddress: 0,
@@ -168,7 +169,13 @@ export const DepositArea = ({
 
   React.useEffect(() => {
     const round = round_list.find((r: any) => r.roundId === current_round_id)
-    if (round) set_current_round({...round})
+    if (round) set_current_round({
+      roundId: round.roundId,
+      start_time: round.startTime,
+      end_time: round.endTime,
+      minAllocationPerAddress: round.minAllocationPerAddress,
+      maxAllocationPerAddress: round.maxAllocationPerAddress,
+    })
   }, [current_round_id, round_list])
 
   const proofQuery = useQuery(
@@ -195,12 +202,12 @@ export const DepositArea = ({
       functionName: 'allowance',
       args: [account.address, seedStages[0]?.seedStageAddress],
     })
-
-    const deposit_decimals = seedStages.depositTokenInfo?.decimals
+    const deposit_decimals = seedStages[0].depositTokenInfo?.decimals
     const formated = allowance
-      ? ethers.formatUnits(allowance.toString(), deposit_decimals)
+      ? ethers.formatUnits(allowance.toString(), Number(deposit_decimals))
       : 0
-    if (Number(formated) >= current_round.minAllocationPerAddress) {
+    const min = ethers.formatUnits(current_round?.maxAllocationPerAddress, Number(deposit_decimals))
+    if (Number(formated) >= Number(min)) {
       set_depositale(true)
     } else {
       set_depositale(false)

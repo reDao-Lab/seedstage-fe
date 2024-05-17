@@ -23,7 +23,7 @@ export const DepositDialog = ({
   const [error, setError] = useState<any>(undefined)
 
   return (
-    <Dialog open={open} onOpenChange={(_) => !_ && onClose?.()}>
+    <Dialog open={open} onOpenChange={(_) => {!_ && onClose?.(); setInput(0)}}>
       <DialogContent className='max-w-xl'>
         <DialogHeader>
           <DialogTitle className='text-3xl text-center text-[#e7e7e7]'>
@@ -45,6 +45,7 @@ export const DepositDialog = ({
                       placeholder=''
                       value={input}
                       onChange={(_) => {
+                        setInput(Number(_.target.value))
                         if (Number(_.target.value) < min_allocation_amount) {
                           return setError(
                             `Minimum allocation is ${min_allocation_amount}`,
@@ -56,7 +57,6 @@ export const DepositDialog = ({
                           )
                         }
                         setError(undefined)
-                        setInput(Number(_.target.value))
                       }}
                     />
                   </div>
