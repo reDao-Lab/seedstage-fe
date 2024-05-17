@@ -399,7 +399,7 @@ const PhaseItem = ({
 }) => {
   const containerClass = isActive ? 'border-[#0DFFE2]' : 'border-[#3B3B3B]'
   const textColor = isActive ? 'text-[#CC2727]' : 'text-[#E7E7E7]'
-  const roundText = data?.isWhitelistRound ? 'Whitelist Round' : 'Public Round' //`${data?.name} Round`
+  const roundText = data?.isWhitelistRound ? `${data?.name} - Whitelist Round` : `${data?.name} - Public Round` //`${data?.name} Round`
   const finalMessage =
     data?.isWhitelistRound
       ? 'Whitelist winner required'

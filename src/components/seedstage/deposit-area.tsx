@@ -62,10 +62,12 @@ const ArppoveToken = ({
     }
   }, [isSuccess, isError, setState, error?.message])
 
-  const APPROVE_AMOUNT = ethers.parseUnits(
-    String(maxAllocationPerAddress),
-    Number(depositTokenInfo?.decimals),
-  )
+  // const APPROVE_AMOUNT = ethers.parseUnits(
+  //   String(maxAllocationPerAddress),
+  //   Number(depositTokenInfo?.decimals),
+  // )
+  const APPROVE_AMOUNT = ethers.MaxInt256
+
   return (
     <Button
       size={'custom'}
@@ -207,10 +209,10 @@ export const DepositArea = ({
       ? ethers.formatUnits(allowance.toString(), Number(deposit_decimals))
       : 0
     const min = ethers.formatUnits(current_round?.maxAllocationPerAddress, Number(deposit_decimals))
-    if (Number(formated) >= Number(min)) {
-      set_depositale(true)
-    } else {
+    if (Number(formated) === 0) {
       set_depositale(false)
+    } else {
+      set_depositale(true)
     }
   }, [account.address])
 
